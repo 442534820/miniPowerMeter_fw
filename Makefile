@@ -114,6 +114,7 @@ include $(CHIBIOS)/tools/mk/autobuild.mk
 #include $(CHIBIOS)/test/lib/test.mk
 #include $(CHIBIOS)/test/rt/rt_test.mk
 #include $(CHIBIOS)/test/oslib/oslib_test.mk
+include $(CHIBIOS)/os/hal/lib/streams/streams.mk
 
 # Define linker script file here
 LDSCRIPT= $(STARTUPLD)/STM32F072xB.ld
@@ -123,6 +124,7 @@ LDSCRIPT= $(STARTUPLD)/STM32F072xB.ld
 CSRC = $(ALLCSRC) \
        $(TESTSRC) \
        app/main.c
+CSRC += usbd/usbcfg.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.

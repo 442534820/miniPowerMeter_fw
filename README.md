@@ -1,4 +1,4 @@
-#miniPowerMeter firmware
+# miniPowerMeter firmware
 ---
 
 ## Build
@@ -16,4 +16,7 @@ __or using default openocd script files__</br>
 > monitor halt</br>
 > monitor flash write_image erase build/mini_pm.elf</br>
 > monitor reset</br>
+__or using script__</br>
+> arm-none-line-gnueabi-gdb</br>
+> source script/gdb_download.gdb
 

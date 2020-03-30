@@ -63,8 +63,8 @@
  */
 #define GPIOA_LED1                  0U
 #define GPIOA_LED2                  1U
-#define GPIOA_UART1_TX              2U
-#define GPIOA_UART1_RX              3U
+#define GPIOA_UART2_TX              2U
+#define GPIOA_UART2_RX              3U
 #define GPIOA_BQ_PG                 4U
 #define GPIOA_BQ_STAT               5U
 #define GPIOA_BQ_CE                 6U
@@ -127,8 +127,8 @@
 #define LINE_BQ_INT                 PAL_LINE(GPIOA, GPIOA_BQ_INT)
 #define LINE_LED1                   PAL_LINE(GPIOA, GPIOA_LED1)
 #define LINE_LED2                   PAL_LINE(GPIOA, GPIOA_LED2)
-#define LINE_UART1_TX               PAL_LINE(GPIOA, GPIOA_UART1_TX)
-#define LINE_UART1_RX               PAL_LINE(GPIOA, GPIOA_UART1_RX)
+#define LINE_UART2_TX               PAL_LINE(GPIOA, GPIOA_UART2_TX)
+#define LINE_UART2_RX               PAL_LINE(GPIOA, GPIOA_UART2_RX)
 #define LINE_I2C1_SCL               PAL_LINE(GPIOB, GPIOB_I2C1_SCL)
 #define LINE_I2C1_SDA               PAL_LINE(GPIOB, GPIOB_I2C1_SDA)
 #define LINE_OLED_DC                PAL_LINE(GPIOB, GPIOB_OLED_DC)
@@ -199,8 +199,8 @@
  */
 #define VAL_GPIOA_MODER             (PIN_MODE_OUTPUT(GPIOA_LED1) |         \
                                      PIN_MODE_OUTPUT(GPIOA_LED2) |           \
-                                     PIN_MODE_ALTERNATE(GPIOA_UART1_TX) |           \
-                                     PIN_MODE_ALTERNATE(GPIOA_UART1_RX) |           \
+                                     PIN_MODE_ALTERNATE(GPIOA_UART2_TX) |           \
+                                     PIN_MODE_ALTERNATE(GPIOA_UART2_RX) |           \
                                      PIN_MODE_INPUT(GPIOA_BQ_PG) |           \
                                      PIN_MODE_INPUT(GPIOA_BQ_STAT) |           \
                                      PIN_MODE_OUTPUT(GPIOA_BQ_CE) |           \
@@ -215,8 +215,8 @@
                                      PIN_MODE_INPUT(GPIOA_BUTTON4))
 #define VAL_GPIOA_OTYPER            (PIN_OTYPE_PUSHPULL(GPIOA_LED1) |     \
                                      PIN_OTYPE_PUSHPULL(GPIOA_LED2) |       \
-                                     PIN_OTYPE_PUSHPULL(GPIOA_UART1_TX) |       \
-                                     PIN_OTYPE_PUSHPULL(GPIOA_UART1_RX) |       \
+                                     PIN_OTYPE_PUSHPULL(GPIOA_UART2_TX) |       \
+                                     PIN_OTYPE_PUSHPULL(GPIOA_UART2_RX) |       \
                                      PIN_OTYPE_PUSHPULL(GPIOA_BQ_PG) |       \
                                      PIN_OTYPE_PUSHPULL(GPIOA_BQ_STAT) |       \
                                      PIN_OTYPE_PUSHPULL(GPIOA_BQ_CE) |       \
@@ -231,8 +231,8 @@
                                      PIN_OTYPE_PUSHPULL(GPIOA_BUTTON4))
 #define VAL_GPIOA_OSPEEDR           (PIN_OSPEED_MEDIUM(GPIOA_LED1) |     \
                                      PIN_OSPEED_MEDIUM(GPIOA_LED2) |       \
-                                     PIN_OSPEED_MEDIUM(GPIOA_UART1_TX) |       \
-                                     PIN_OSPEED_MEDIUM(GPIOA_UART1_RX) |       \
+                                     PIN_OSPEED_MEDIUM(GPIOA_UART2_TX) |       \
+                                     PIN_OSPEED_MEDIUM(GPIOA_UART2_RX) |       \
                                      PIN_OSPEED_MEDIUM(GPIOA_BQ_PG) |       \
                                      PIN_OSPEED_MEDIUM(GPIOA_BQ_STAT) |       \
                                      PIN_OSPEED_MEDIUM(GPIOA_BQ_CE) |       \
@@ -247,8 +247,8 @@
                                      PIN_OSPEED_MEDIUM(GPIOA_BUTTON4))
 #define VAL_GPIOA_PUPDR             (PIN_PUPDR_PULLUP(GPIOA_LED1) |     \
                                      PIN_PUPDR_PULLUP(GPIOA_LED2) |         \
-                                     PIN_PUPDR_PULLUP(GPIOA_UART1_TX) |         \
-                                     PIN_PUPDR_PULLUP(GPIOA_UART1_RX) |         \
+                                     PIN_PUPDR_PULLUP(GPIOA_UART2_TX) |         \
+                                     PIN_PUPDR_PULLUP(GPIOA_UART2_RX) |         \
                                      PIN_PUPDR_PULLUP(GPIOA_BQ_PG) |         \
                                      PIN_PUPDR_PULLUP(GPIOA_BQ_STAT) |         \
                                      PIN_PUPDR_PULLUP(GPIOA_BQ_CE) |         \
@@ -263,8 +263,8 @@
                                      PIN_PUPDR_PULLUP(GPIOA_BUTTON4))
 #define VAL_GPIOA_ODR               (PIN_ODR_HIGH(GPIOA_LED1) |           \
                                      PIN_ODR_HIGH(GPIOA_LED2) |             \
-                                     PIN_ODR_HIGH(GPIOA_UART1_TX) |             \
-                                     PIN_ODR_HIGH(GPIOA_UART1_RX) |             \
+                                     PIN_ODR_HIGH(GPIOA_UART2_TX) |             \
+                                     PIN_ODR_HIGH(GPIOA_UART2_RX) |             \
                                      PIN_ODR_HIGH(GPIOA_BQ_PG) |             \
                                      PIN_ODR_HIGH(GPIOA_BQ_STAT) |             \
                                      PIN_ODR_HIGH(GPIOA_BQ_CE) |             \
@@ -279,8 +279,8 @@
                                      PIN_ODR_HIGH(GPIOA_BUTTON4))
 #define VAL_GPIOA_AFRL              (PIN_AFIO_AF(GPIOA_LED1, 0U) |        \
                                      PIN_AFIO_AF(GPIOA_LED2, 0U) |          \
-                                     PIN_AFIO_AF(GPIOA_UART1_TX, 0U) |          \
-                                     PIN_AFIO_AF(GPIOA_UART1_RX, 0U) |          \
+                                     PIN_AFIO_AF(GPIOA_UART2_TX, 1U) |          \
+                                     PIN_AFIO_AF(GPIOA_UART2_RX, 1U) |          \
                                      PIN_AFIO_AF(GPIOA_BQ_PG, 0U) |          \
                                      PIN_AFIO_AF(GPIOA_BQ_STAT, 0U) |          \
                                      PIN_AFIO_AF(GPIOA_BQ_CE, 0U) |          \

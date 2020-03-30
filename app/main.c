@@ -16,6 +16,10 @@
 
 #include "ch.h"
 #include "hal.h"
+#include "usbd/usbcfg.h"
+#include "chprintf.h"
+
+uint32_t connect_count;
 
 /*
  * Blue LED blinker thread, times are in milliseconds.
@@ -64,13 +68,16 @@ int main(void) {
   halInit();
   chSysInit();
 
-  /*
-   * Activates the serial driver 1 using the driver default configuration.
-   * PA9 and PA10 are routed to USART1.
-   */
-  sdStart(&SD1, NULL);
-  palSetPadMode(GPIOA, 9, PAL_MODE_ALTERNATE(1));       /* USART1 TX.       */
-  palSetPadMode(GPIOA, 10, PAL_MODE_ALTERNATE(1));      /* USART1 RX.       */
+  sduObjectInit(&SDU1);
+  sduStart(&SDU1, &serusbcfg);
+  usbDisconnectBus(serusbcfg.usbp);
+  chThdSleepMilliseconds(1500);
+  usbStart(serusbcfg.usbp, &usbcfg);
+  usbConnectBus(serusbcfg.usbp);
+
+  /* SERIAL_DEFAULT_BITRATE is setting to 115200 */
+  sdStart(&SD2, NULL);
+  chprintf(&SD2, "miniPowerMeter\r\n");
 
   /*
    * Creates the blinker threads.
@@ -78,14 +85,16 @@ int main(void) {
   chThdCreateStatic(waThread1, sizeof(waThread1), NORMALPRIO, Thread1, NULL);
   chThdCreateStatic(waThread2, sizeof(waThread2), NORMALPRIO, Thread2, NULL);
 
-  /*
-   * Normal main() thread activity, in this demo it does nothing except
-   * sleeping in a loop and check the button state, when the button is
-   * pressed the test procedure is launched with output on the serial
-   * driver 1.
-   */
   while (true) {
-    if (palReadPad(GPIOB, GPIOB_BUTTON1)) {
+    if(SDU1.config->usbp->state == USB_ACTIVE) {
+        chprintf(&SDU1, "miniPowerMeter Connected!\n");
+        while (true) {
+            if(SDU1.config->usbp->state != USB_ACTIVE) {
+                break;
+            }
+            chThdSleepMilliseconds(1000);
+            chprintf(&SDU1, "%d\r\n", connect_count);
+        }
     }
     chThdSleepMilliseconds(500);
   }

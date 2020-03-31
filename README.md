@@ -18,8 +18,8 @@ __or using default openocd script files__</br>
 > monitor reset</br>
 __or using script__</br>
 > arm-none-line-gnueabi-gdb</br>
-> source script/gdb_download.gdb
+> source script/gdb_download.gdb</br>
 __or using makefile command__</br>
-> make download
-> make debug
+> make download</br>
+> make debug</br>
 

@@ -307,12 +307,12 @@
  * PB7  - I2C1_SDA                  (input pullup).
  * PB8  - YB24_CE                   (input pullup).
  * PB9  - YB24_CS                   (input pullup).
- * PB10 - OLED_DC                   (input pullup).
- * PB11 - OLED_RES                  (input pullup).
- * PB12 - OLED_CS                   (input pullup).
- * PB13 - OLED_SCK                  (alternate 0).
- * PB14 - PIN14                     (alternate 0).
- * PB15 - OLED_SDA                  (input pullup).
+ * PB10 - OLED_DC                   (output pushpull maximum).
+ * PB11 - OLED_RES                  (output pushpull maximum).
+ * PB12 - OLED_CS                   (output pushpull maximum).
+ * PB13 - OLED_SCK                  (output pushpull maximum).
+ * PB14 - PIN14                     (input pullup).
+ * PB15 - OLED_SDA                  (output pushpull maximum).
  */
 #define VAL_GPIOB_MODER             (PIN_MODE_INPUT(GPIOB_BUTTON1) |           \
                                      PIN_MODE_INPUT(GPIOB_BUTTON2) |           \
@@ -324,12 +324,12 @@
                                      PIN_MODE_INPUT(GPIOB_I2C1_SDA) |           \
                                      PIN_MODE_INPUT(GPIOB_YB24_CE) |           \
                                      PIN_MODE_INPUT(GPIOB_YB24_CS) |           \
-                                     PIN_MODE_INPUT(GPIOB_OLED_DC) |          \
-                                     PIN_MODE_INPUT(GPIOB_OLED_RES) |          \
-                                     PIN_MODE_INPUT(GPIOB_OLED_CS) |          \
-                                     PIN_MODE_INPUT(GPIOB_OLED_SCK) |   \
+                                     PIN_MODE_OUTPUT(GPIOB_OLED_DC) |          \
+                                     PIN_MODE_OUTPUT(GPIOB_OLED_RES) |          \
+                                     PIN_MODE_OUTPUT(GPIOB_OLED_CS) |          \
+                                     PIN_MODE_OUTPUT(GPIOB_OLED_SCK) |   \
                                      PIN_MODE_INPUT(GPIOB_PIN14) |  \
-                                     PIN_MODE_INPUT(GPIOB_OLED_SDA))
+                                     PIN_MODE_OUTPUT(GPIOB_OLED_SDA))
 #define VAL_GPIOB_OTYPER            (PIN_OTYPE_PUSHPULL(GPIOB_BUTTON1) |       \
                                      PIN_OTYPE_PUSHPULL(GPIOB_BUTTON2) |       \
                                      PIN_OTYPE_PUSHPULL(GPIOB_BUTTON3) |       \

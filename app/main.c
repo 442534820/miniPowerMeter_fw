@@ -18,6 +18,7 @@
 #include "hal.h"
 #include "usbd/usbcfg.h"
 #include "chprintf.h"
+#include "driver/ui12864.h"
 
 uint32_t connect_count;
 
@@ -78,6 +79,10 @@ int main(void) {
   /* SERIAL_DEFAULT_BITRATE is setting to 115200 */
   sdStart(&SD2, NULL);
   chprintf(&SD2, "miniPowerMeter\r\n");
+
+  UI12864_Init();
+  UI12864_PutString(0, 0, "miniPowerMeter");
+  UI12864_PutString(1, 10, "OLED test ok!");
 
   /*
    * Creates the blinker threads.

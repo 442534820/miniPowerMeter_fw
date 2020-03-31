@@ -125,6 +125,11 @@ CSRC = $(ALLCSRC) \
        $(TESTSRC) \
        app/main.c
 CSRC += usbd/usbcfg.c
+CSRC += driver/oled.c
+CSRC += driver/font.c
+CSRC += driver/ui12864.c
+
+DRIVERINC = driver
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
@@ -137,7 +142,7 @@ ASMSRC = $(ALLASMSRC)
 ASMXSRC = $(ALLXASMSRC)
 
 # Inclusion directories.
-INCDIR = $(CONFDIR) $(ALLINC) $(TESTINC)
+INCDIR = $(CONFDIR) $(ALLINC) $(DRIVERINC)
 
 # Define C warning options here.
 CWARN = -Wall -Wextra -Wundef -Wstrict-prototypes

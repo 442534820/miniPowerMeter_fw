@@ -19,4 +19,7 @@ __or using default openocd script files__</br>
 __or using script__</br>
 > arm-none-line-gnueabi-gdb</br>
 > source script/gdb_download.gdb
+__or using makefile command__</br>
+> make download
+> make debug
 

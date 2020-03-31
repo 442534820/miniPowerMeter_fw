@@ -187,8 +187,9 @@ include $(RULESPATH)/rules.mk
 ##############################################################################
 # Custom rules
 #
-TRGT = ~/tools/gcc-arm-none-eabi-9-2019-q4-major/bin/arm-none-eabi-
-GDB = ~/tools/gcc-arm-none-eabi-9-2019-q4-major/bin/arm-none-eabi-gdb
+TRGT = ~/tools/gcc-arm-none-eabi-5_4-2016q3/bin/arm-none-eabi-
+GDB = ~/tools/gcc-arm-none-eabi-5_4-2016q3/bin/arm-none-eabi-gdb
+
 download:
 	$(GDB) -nx -x script/gdb_download.gdb
 

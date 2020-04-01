@@ -78,7 +78,7 @@ int main(void) {
 
   /* SERIAL_DEFAULT_BITRATE is setting to 115200 */
   sdStart(&SD2, NULL);
-  chprintf(&SD2, "miniPowerMeter\r\n");
+  chprintf((BaseSequentialStream*)&SD2, "miniPowerMeter\r\n");
 
   UI12864_Init();
   UI12864_PutString(0, 0, "miniPowerMeter");
@@ -92,13 +92,13 @@ int main(void) {
 
   while (true) {
     if(SDU1.config->usbp->state == USB_ACTIVE) {
-        chprintf(&SDU1, "miniPowerMeter Connected!\n");
+        chprintf((BaseSequentialStream*)&SDU1, "miniPowerMeter Connected!\n");
         while (true) {
             if(SDU1.config->usbp->state != USB_ACTIVE) {
                 break;
             }
             chThdSleepMilliseconds(1000);
-            chprintf(&SDU1, "%d\r\n", connect_count);
+            chprintf((BaseSequentialStream*)&SDU1, "%d\r\n", connect_count);
         }
     }
     chThdSleepMilliseconds(500);

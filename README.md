@@ -9,6 +9,8 @@
 > openocd -f jlink.cfg -f stm32f0x.cfg</br>
 __or using default openocd script files__</br>
 > openocd -f interface/jlink.cfg -f target/stm32f0x.cfg</br>
+__or using auto script__</br>
+> ./script/run_openocd.sh
 
 ## Start Flash & Debug
 > arm-none-linux-gnueabi-gdb</br>

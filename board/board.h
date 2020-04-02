@@ -303,8 +303,8 @@
  * PB3  - YB24_SCK                  (input pullup).
  * PB4  - YB24_SDO                  (input pullup).
  * PB5  - YB24_SDI                  (input pullup).
- * PB6  - I2C1_SCL                  (input pullup).
- * PB7  - I2C1_SDA                  (input pullup).
+ * PB6  - I2C1_SCL                  (alternate).
+ * PB7  - I2C1_SDA                  (alternate).
  * PB8  - YB24_CE                   (input pullup).
  * PB9  - YB24_CS                   (input pullup).
  * PB10 - OLED_DC                   (output pushpull maximum).
@@ -320,8 +320,8 @@
                                      PIN_MODE_INPUT(GPIOB_YB24_SCK) |           \
                                      PIN_MODE_INPUT(GPIOB_YB24_SDO) |           \
                                      PIN_MODE_INPUT(GPIOB_YB24_SDI) |           \
-                                     PIN_MODE_INPUT(GPIOB_I2C1_SCL) |           \
-                                     PIN_MODE_INPUT(GPIOB_I2C1_SDA) |           \
+                                     PIN_MODE_ALTERNATE(GPIOB_I2C1_SCL) |           \
+                                     PIN_MODE_ALTERNATE(GPIOB_I2C1_SDA) |           \
                                      PIN_MODE_INPUT(GPIOB_YB24_CE) |           \
                                      PIN_MODE_INPUT(GPIOB_YB24_CS) |           \
                                      PIN_MODE_OUTPUT(GPIOB_OLED_DC) |          \
@@ -336,8 +336,8 @@
                                      PIN_OTYPE_PUSHPULL(GPIOB_YB24_SCK) |       \
                                      PIN_OTYPE_PUSHPULL(GPIOB_YB24_SDO) |       \
                                      PIN_OTYPE_PUSHPULL(GPIOB_YB24_SDI) |       \
-                                     PIN_OTYPE_PUSHPULL(GPIOB_I2C1_SCL) |       \
-                                     PIN_OTYPE_PUSHPULL(GPIOB_I2C1_SDA) |       \
+                                     PIN_OTYPE_OPENDRAIN(GPIOB_I2C1_SCL) |       \
+                                     PIN_OTYPE_OPENDRAIN(GPIOB_I2C1_SDA) |       \
                                      PIN_OTYPE_PUSHPULL(GPIOB_YB24_CE) |       \
                                      PIN_OTYPE_PUSHPULL(GPIOB_YB24_CS) |       \
                                      PIN_OTYPE_PUSHPULL(GPIOB_OLED_DC) |      \
@@ -400,8 +400,8 @@
                                      PIN_AFIO_AF(GPIOB_YB24_SCK, 0U) |          \
                                      PIN_AFIO_AF(GPIOB_YB24_SDO, 0U) |          \
                                      PIN_AFIO_AF(GPIOB_YB24_SDI, 0U) |          \
-                                     PIN_AFIO_AF(GPIOB_I2C1_SCL, 0U) |          \
-                                     PIN_AFIO_AF(GPIOB_I2C1_SDA, 0U))
+                                     PIN_AFIO_AF(GPIOB_I2C1_SCL, 1U) |          \
+                                     PIN_AFIO_AF(GPIOB_I2C1_SDA, 1U))
 #define VAL_GPIOB_AFRH              (PIN_AFIO_AF(GPIOB_YB24_CE, 0U) |          \
                                      PIN_AFIO_AF(GPIOB_YB24_CS, 0U) |          \
                                      PIN_AFIO_AF(GPIOB_OLED_DC, 0U) |         \

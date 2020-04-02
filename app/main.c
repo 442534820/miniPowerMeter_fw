@@ -19,9 +19,14 @@
 #include "usbd/usbcfg.h"
 #include "chprintf.h"
 #include "driver/ui12864.h"
+#include "driver/device_port.h"
+#include "driver/ina226.h"
+#include <stdio.h>
 
 uint32_t connect_count;
-
+uint16_t bus_vot;
+int16_t bus_cur;
+char str_buf[32];
 /*
  * Blue LED blinker thread, times are in milliseconds.
  */
@@ -30,11 +35,23 @@ static THD_FUNCTION(Thread1, arg) {
 
   (void)arg;
   chRegSetThreadName("blinker1");
+  ina226_config(0x4527);
+  ina226_set_calibration_by_RI(0.002, 3.2);
   while (true) {
     palClearPad(GPIOA, GPIOA_LED1);
     chThdSleepMilliseconds(500);
     palSetPad(GPIOA, GPIOA_LED1);
     chThdSleepMilliseconds(500);
+    ina226_read_bus_voltage(&bus_vot);
+    ina226_read_current((uint16_t*)&bus_cur);
+    chsnprintf(str_buf, sizeof(str_buf), "%04X", bus_vot);
+    UI12864_PutString(2, 10, str_buf);
+    chsnprintf(str_buf, sizeof(str_buf), "%2.3fV", bus_vot * 0.00125f);
+    UI12864_PutString(2, 50, str_buf);
+    chsnprintf(str_buf, sizeof(str_buf), "%04X", (uint16_t)bus_cur);
+    UI12864_PutString(3, 10, str_buf);
+    chsnprintf(str_buf, sizeof(str_buf), "%4.1fmA", bus_cur / 10.24f);
+    UI12864_PutString(3, 50, str_buf);
   }
 }
 
@@ -83,6 +100,8 @@ int main(void) {
   UI12864_Init();
   UI12864_PutString(0, 0, "miniPowerMeter");
   UI12864_PutString(1, 10, "OLED test ok!");
+
+  dev_init();
 
   /*
    * Creates the blinker threads.

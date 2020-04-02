@@ -128,6 +128,8 @@ CSRC += usbd/usbcfg.c
 CSRC += driver/oled.c
 CSRC += driver/font.c
 CSRC += driver/ui12864.c
+CSRC += driver/ina226.c
+CSRC += driver/device_port.c
 
 DRIVERINC = driver
 
@@ -159,7 +161,7 @@ CPPWARN = -Wall -Wextra -Wundef
 #
 
 # List all user C define here, like -D_DEBUG=1
-UDEFS =
+UDEFS = -DCHPRINTF_USE_FLOAT=TRUE
 
 # Define ASM defines here
 UADEFS =

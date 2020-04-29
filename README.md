@@ -25,3 +25,7 @@ __or using makefile command__</br>
 > make download</br>
 > make debug</br>
 
+## Flash via DFU (dfuse-tool needed)
+> dfu-convert -b 0x08000000:build/mini_pm.bin build/mini_pm.dfu</br>
+> dfu-util -a 0 -D build/mini_pm.dfu</br>
+

@@ -188,7 +188,7 @@
  * PA5  - BQ_STAT                   (input pullup).
  * PA6  - BQ_CE                     (output pushpull maximum).
  * PA7  - BQ_PSEL                   (output pushpull maximum).
- * PA8  - BQ_QON                    (input pullup).//TODO
+ * PA8  - BQ_QON                    (input pullup).//not used
  * PA9  - BQ_INT                    (input pullup).
  * PA10 - YB24_IRQ                  (input pullup).
  * PA11 - USB_DM                    (input floating).
@@ -197,97 +197,97 @@
  * PA14 - SWCLK                     (alternate 0).
  * PA15 - BUTTON4                   (input pullup).
  */
-#define VAL_GPIOA_MODER             (PIN_MODE_OUTPUT(GPIOA_LED1) |         \
-                                     PIN_MODE_OUTPUT(GPIOA_LED2) |           \
-                                     PIN_MODE_ALTERNATE(GPIOA_UART2_TX) |           \
-                                     PIN_MODE_ALTERNATE(GPIOA_UART2_RX) |           \
-                                     PIN_MODE_INPUT(GPIOA_BQ_PG) |           \
-                                     PIN_MODE_INPUT(GPIOA_BQ_STAT) |           \
-                                     PIN_MODE_OUTPUT(GPIOA_BQ_CE) |           \
-                                     PIN_MODE_OUTPUT(GPIOA_BQ_PSEL) |           \
-                                     PIN_MODE_INPUT(GPIOA_BQ_QON) |           \
-                                     PIN_MODE_INPUT(GPIOA_BQ_INT) |           \
-                                     PIN_MODE_INPUT(GPIOA_YB24_IRQ) |          \
+#define VAL_GPIOA_MODER             (PIN_MODE_OUTPUT(GPIOA_LED1) |          \
+                                     PIN_MODE_OUTPUT(GPIOA_LED2) |          \
+                                     PIN_MODE_ALTERNATE(GPIOA_UART2_TX) |   \
+                                     PIN_MODE_ALTERNATE(GPIOA_UART2_RX) |   \
+                                     PIN_MODE_INPUT(GPIOA_BQ_PG) |          \
+                                     PIN_MODE_INPUT(GPIOA_BQ_STAT) |        \
+                                     PIN_MODE_OUTPUT(GPIOA_BQ_CE) |         \
+                                     PIN_MODE_OUTPUT(GPIOA_BQ_PSEL) |       \
+                                     PIN_MODE_INPUT(GPIOA_BQ_QON) |         \
+                                     PIN_MODE_INPUT(GPIOA_BQ_INT) |         \
+                                     PIN_MODE_INPUT(GPIOA_YB24_IRQ) |       \
                                      PIN_MODE_INPUT(GPIOA_USB_DM) |         \
                                      PIN_MODE_INPUT(GPIOA_USB_DP) |         \
                                      PIN_MODE_ALTERNATE(GPIOA_SWDIO) |      \
                                      PIN_MODE_ALTERNATE(GPIOA_SWCLK) |      \
                                      PIN_MODE_INPUT(GPIOA_BUTTON4))
-#define VAL_GPIOA_OTYPER            (PIN_OTYPE_PUSHPULL(GPIOA_LED1) |     \
+#define VAL_GPIOA_OTYPER            (PIN_OTYPE_PUSHPULL(GPIOA_LED1) |       \
                                      PIN_OTYPE_PUSHPULL(GPIOA_LED2) |       \
-                                     PIN_OTYPE_PUSHPULL(GPIOA_UART2_TX) |       \
-                                     PIN_OTYPE_PUSHPULL(GPIOA_UART2_RX) |       \
-                                     PIN_OTYPE_PUSHPULL(GPIOA_BQ_PG) |       \
-                                     PIN_OTYPE_PUSHPULL(GPIOA_BQ_STAT) |       \
-                                     PIN_OTYPE_PUSHPULL(GPIOA_BQ_CE) |       \
-                                     PIN_OTYPE_PUSHPULL(GPIOA_BQ_PSEL) |       \
-                                     PIN_OTYPE_PUSHPULL(GPIOA_BQ_QON) |       \
-                                     PIN_OTYPE_PUSHPULL(GPIOA_BQ_INT) |       \
-                                     PIN_OTYPE_PUSHPULL(GPIOA_YB24_IRQ) |      \
+                                     PIN_OTYPE_PUSHPULL(GPIOA_UART2_TX) |   \
+                                     PIN_OTYPE_PUSHPULL(GPIOA_UART2_RX) |   \
+                                     PIN_OTYPE_OPENDRAIN(GPIOA_BQ_PG) |     \
+                                     PIN_OTYPE_OPENDRAIN(GPIOA_BQ_STAT) |   \
+                                     PIN_OTYPE_PUSHPULL(GPIOA_BQ_CE) |      \
+                                     PIN_OTYPE_PUSHPULL(GPIOA_BQ_PSEL) |    \
+                                     PIN_OTYPE_PUSHPULL(GPIOA_BQ_QON) |     \
+                                     PIN_OTYPE_OPENDRAIN(GPIOA_BQ_INT) |    \
+                                     PIN_OTYPE_OPENDRAIN(GPIOA_YB24_IRQ) |  \
                                      PIN_OTYPE_PUSHPULL(GPIOA_USB_DM) |     \
                                      PIN_OTYPE_PUSHPULL(GPIOA_USB_DP) |     \
                                      PIN_OTYPE_PUSHPULL(GPIOA_SWDIO) |      \
                                      PIN_OTYPE_PUSHPULL(GPIOA_SWCLK) |      \
-                                     PIN_OTYPE_PUSHPULL(GPIOA_BUTTON4))
-#define VAL_GPIOA_OSPEEDR           (PIN_OSPEED_MEDIUM(GPIOA_LED1) |     \
-                                     PIN_OSPEED_MEDIUM(GPIOA_LED2) |       \
-                                     PIN_OSPEED_MEDIUM(GPIOA_UART2_TX) |       \
-                                     PIN_OSPEED_MEDIUM(GPIOA_UART2_RX) |       \
+                                     PIN_OTYPE_OPENDRAIN(GPIOA_BUTTON4))
+#define VAL_GPIOA_OSPEEDR           (PIN_OSPEED_MEDIUM(GPIOA_LED1) |        \
+                                     PIN_OSPEED_MEDIUM(GPIOA_LED2) |        \
+                                     PIN_OSPEED_MEDIUM(GPIOA_UART2_TX) |    \
+                                     PIN_OSPEED_MEDIUM(GPIOA_UART2_RX) |    \
                                      PIN_OSPEED_MEDIUM(GPIOA_BQ_PG) |       \
-                                     PIN_OSPEED_MEDIUM(GPIOA_BQ_STAT) |       \
+                                     PIN_OSPEED_MEDIUM(GPIOA_BQ_STAT) |     \
                                      PIN_OSPEED_MEDIUM(GPIOA_BQ_CE) |       \
-                                     PIN_OSPEED_MEDIUM(GPIOA_BQ_PSEL) |       \
-                                     PIN_OSPEED_MEDIUM(GPIOA_BQ_QON) |       \
-                                     PIN_OSPEED_MEDIUM(GPIOA_BQ_INT) |       \
-                                     PIN_OSPEED_MEDIUM(GPIOA_YB24_IRQ) |      \
-                                     PIN_OSPEED_HIGH(GPIOA_USB_DM) |     \
-                                     PIN_OSPEED_HIGH(GPIOA_USB_DP) |     \
+                                     PIN_OSPEED_MEDIUM(GPIOA_BQ_PSEL) |     \
+                                     PIN_OSPEED_MEDIUM(GPIOA_BQ_QON) |      \
+                                     PIN_OSPEED_MEDIUM(GPIOA_BQ_INT) |      \
+                                     PIN_OSPEED_MEDIUM(GPIOA_YB24_IRQ) |    \
+                                     PIN_OSPEED_HIGH(GPIOA_USB_DM) |        \
+                                     PIN_OSPEED_HIGH(GPIOA_USB_DP) |        \
                                      PIN_OSPEED_HIGH(GPIOA_SWDIO) |         \
                                      PIN_OSPEED_HIGH(GPIOA_SWCLK) |         \
                                      PIN_OSPEED_MEDIUM(GPIOA_BUTTON4))
-#define VAL_GPIOA_PUPDR             (PIN_PUPDR_PULLUP(GPIOA_LED1) |     \
+#define VAL_GPIOA_PUPDR             (PIN_PUPDR_PULLUP(GPIOA_LED1) |         \
                                      PIN_PUPDR_PULLUP(GPIOA_LED2) |         \
-                                     PIN_PUPDR_PULLUP(GPIOA_UART2_TX) |         \
-                                     PIN_PUPDR_PULLUP(GPIOA_UART2_RX) |         \
-                                     PIN_PUPDR_PULLUP(GPIOA_BQ_PG) |         \
-                                     PIN_PUPDR_PULLUP(GPIOA_BQ_STAT) |         \
-                                     PIN_PUPDR_PULLUP(GPIOA_BQ_CE) |         \
-                                     PIN_PUPDR_PULLUP(GPIOA_BQ_PSEL) |         \
-                                     PIN_PUPDR_PULLUP(GPIOA_BQ_QON) |         \
-                                     PIN_PUPDR_PULLUP(GPIOA_BQ_INT) |         \
-                                     PIN_PUPDR_PULLUP(GPIOA_YB24_IRQ) |        \
+                                     PIN_PUPDR_PULLUP(GPIOA_UART2_TX) |     \
+                                     PIN_PUPDR_PULLUP(GPIOA_UART2_RX) |     \
+                                     PIN_PUPDR_PULLUP(GPIOA_BQ_PG) |        \
+                                     PIN_PUPDR_PULLUP(GPIOA_BQ_STAT) |      \
+                                     PIN_PUPDR_PULLUP(GPIOA_BQ_CE) |        \
+                                     PIN_PUPDR_PULLUP(GPIOA_BQ_PSEL) |      \
+                                     PIN_PUPDR_PULLUP(GPIOA_BQ_QON) |       \
+                                     PIN_PUPDR_PULLUP(GPIOA_BQ_INT) |       \
+                                     PIN_PUPDR_PULLUP(GPIOA_YB24_IRQ) |     \
                                      PIN_PUPDR_FLOATING(GPIOA_USB_DM) |     \
                                      PIN_PUPDR_FLOATING(GPIOA_USB_DP) |     \
                                      PIN_PUPDR_PULLUP(GPIOA_SWDIO) |        \
                                      PIN_PUPDR_PULLDOWN(GPIOA_SWCLK) |      \
                                      PIN_PUPDR_PULLUP(GPIOA_BUTTON4))
-#define VAL_GPIOA_ODR               (PIN_ODR_HIGH(GPIOA_LED1) |           \
+#define VAL_GPIOA_ODR               (PIN_ODR_HIGH(GPIOA_LED1) |             \
                                      PIN_ODR_HIGH(GPIOA_LED2) |             \
-                                     PIN_ODR_HIGH(GPIOA_UART2_TX) |             \
-                                     PIN_ODR_HIGH(GPIOA_UART2_RX) |             \
-                                     PIN_ODR_HIGH(GPIOA_BQ_PG) |             \
-                                     PIN_ODR_HIGH(GPIOA_BQ_STAT) |             \
-                                     PIN_ODR_HIGH(GPIOA_BQ_CE) |             \
-                                     PIN_ODR_HIGH(GPIOA_BQ_PSEL) |             \
-                                     PIN_ODR_HIGH(GPIOA_BQ_QON) |             \
-                                     PIN_ODR_HIGH(GPIOA_BQ_INT) |             \
-                                     PIN_ODR_HIGH(GPIOA_YB24_IRQ) |            \
+                                     PIN_ODR_HIGH(GPIOA_UART2_TX) |         \
+                                     PIN_ODR_HIGH(GPIOA_UART2_RX) |         \
+                                     PIN_ODR_HIGH(GPIOA_BQ_PG) |            \
+                                     PIN_ODR_HIGH(GPIOA_BQ_STAT) |          \
+                                     PIN_ODR_HIGH(GPIOA_BQ_CE) |            \
+                                     PIN_ODR_HIGH(GPIOA_BQ_PSEL) |          \
+                                     PIN_ODR_HIGH(GPIOA_BQ_QON) |           \
+                                     PIN_ODR_HIGH(GPIOA_BQ_INT) |           \
+                                     PIN_ODR_HIGH(GPIOA_YB24_IRQ) |         \
                                      PIN_ODR_HIGH(GPIOA_USB_DM) |           \
                                      PIN_ODR_HIGH(GPIOA_USB_DP) |           \
                                      PIN_ODR_HIGH(GPIOA_SWDIO) |            \
                                      PIN_ODR_HIGH(GPIOA_SWCLK) |            \
                                      PIN_ODR_HIGH(GPIOA_BUTTON4))
-#define VAL_GPIOA_AFRL              (PIN_AFIO_AF(GPIOA_LED1, 0U) |        \
+#define VAL_GPIOA_AFRL              (PIN_AFIO_AF(GPIOA_LED1, 0U) |          \
                                      PIN_AFIO_AF(GPIOA_LED2, 0U) |          \
-                                     PIN_AFIO_AF(GPIOA_UART2_TX, 1U) |          \
-                                     PIN_AFIO_AF(GPIOA_UART2_RX, 1U) |          \
-                                     PIN_AFIO_AF(GPIOA_BQ_PG, 0U) |          \
-                                     PIN_AFIO_AF(GPIOA_BQ_STAT, 0U) |          \
-                                     PIN_AFIO_AF(GPIOA_BQ_CE, 0U) |          \
+                                     PIN_AFIO_AF(GPIOA_UART2_TX, 1U) |      \
+                                     PIN_AFIO_AF(GPIOA_UART2_RX, 1U) |      \
+                                     PIN_AFIO_AF(GPIOA_BQ_PG, 0U) |         \
+                                     PIN_AFIO_AF(GPIOA_BQ_STAT, 0U) |       \
+                                     PIN_AFIO_AF(GPIOA_BQ_CE, 0U) |         \
                                      PIN_AFIO_AF(GPIOA_BQ_PSEL, 0U))
-#define VAL_GPIOA_AFRH              (PIN_AFIO_AF(GPIOA_BQ_QON, 0U) |          \
-                                     PIN_AFIO_AF(GPIOA_BQ_INT, 0U) |          \
-                                     PIN_AFIO_AF(GPIOA_YB24_IRQ, 0U) |         \
+#define VAL_GPIOA_AFRH              (PIN_AFIO_AF(GPIOA_BQ_QON, 0U) |        \
+                                     PIN_AFIO_AF(GPIOA_BQ_INT, 0U) |        \
+                                     PIN_AFIO_AF(GPIOA_YB24_IRQ, 0U) |      \
                                      PIN_AFIO_AF(GPIOA_USB_DM, 0U) |        \
                                      PIN_AFIO_AF(GPIOA_USB_DP, 0U) |        \
                                      PIN_AFIO_AF(GPIOA_SWDIO, 0U) |         \
@@ -300,13 +300,13 @@
  * PB0  - BUTTON1                   (input pullup).
  * PB1  - BUTTON2                   (input pullup).
  * PB2  - BUTTON3                   (input pullup).
- * PB3  - YB24_SCK                  (input pullup).
- * PB4  - YB24_SDO                  (input pullup).
- * PB5  - YB24_SDI                  (input pullup).
+ * PB3  - YB24_SCK                  (alternate).
+ * PB4  - YB24_SDO                  (alternate).
+ * PB5  - YB24_SDI                  (alternate).
  * PB6  - I2C1_SCL                  (alternate).
  * PB7  - I2C1_SDA                  (alternate).
- * PB8  - YB24_CE                   (input pullup).
- * PB9  - YB24_CS                   (input pullup).
+ * PB8  - YB24_CE                   (output pullup).
+ * PB9  - YB24_CS                   (output pullup).
  * PB10 - OLED_DC                   (output pushpull maximum).
  * PB11 - OLED_RES                  (output pushpull maximum).
  * PB12 - OLED_CS                   (output pushpull maximum).
@@ -314,101 +314,101 @@
  * PB14 - PIN14                     (input pullup).
  * PB15 - OLED_SDA                  (output pushpull maximum).
  */
-#define VAL_GPIOB_MODER             (PIN_MODE_INPUT(GPIOB_BUTTON1) |           \
-                                     PIN_MODE_INPUT(GPIOB_BUTTON2) |           \
-                                     PIN_MODE_INPUT(GPIOB_BUTTON3) |           \
-                                     PIN_MODE_INPUT(GPIOB_YB24_SCK) |           \
-                                     PIN_MODE_INPUT(GPIOB_YB24_SDO) |           \
-                                     PIN_MODE_INPUT(GPIOB_YB24_SDI) |           \
-                                     PIN_MODE_ALTERNATE(GPIOB_I2C1_SCL) |           \
-                                     PIN_MODE_ALTERNATE(GPIOB_I2C1_SDA) |           \
-                                     PIN_MODE_INPUT(GPIOB_YB24_CE) |           \
-                                     PIN_MODE_INPUT(GPIOB_YB24_CS) |           \
-                                     PIN_MODE_OUTPUT(GPIOB_OLED_DC) |          \
-                                     PIN_MODE_OUTPUT(GPIOB_OLED_RES) |          \
-                                     PIN_MODE_OUTPUT(GPIOB_OLED_CS) |          \
-                                     PIN_MODE_OUTPUT(GPIOB_OLED_SCK) |   \
+#define VAL_GPIOB_MODER             (PIN_MODE_INPUT(GPIOB_BUTTON1) |        \
+                                     PIN_MODE_INPUT(GPIOB_BUTTON2) |        \
+                                     PIN_MODE_INPUT(GPIOB_BUTTON3) |        \
+                                     PIN_MODE_ALTERNATE(GPIOB_YB24_SCK) |   \
+                                     PIN_MODE_ALTERNATE(GPIOB_YB24_SDO) |   \
+                                     PIN_MODE_ALTERNATE(GPIOB_YB24_SDI) |   \
+                                     PIN_MODE_ALTERNATE(GPIOB_I2C1_SCL) |   \
+                                     PIN_MODE_ALTERNATE(GPIOB_I2C1_SDA) |   \
+                                     PIN_MODE_OUTPUT(GPIOB_YB24_CE) |       \
+                                     PIN_MODE_OUTPUT(GPIOB_YB24_CS) |       \
+                                     PIN_MODE_OUTPUT(GPIOB_OLED_DC) |       \
+                                     PIN_MODE_OUTPUT(GPIOB_OLED_RES) |      \
+                                     PIN_MODE_OUTPUT(GPIOB_OLED_CS) |       \
+                                     PIN_MODE_OUTPUT(GPIOB_OLED_SCK) |      \
                                      PIN_MODE_INPUT(GPIOB_PIN14) |  \
                                      PIN_MODE_OUTPUT(GPIOB_OLED_SDA))
-#define VAL_GPIOB_OTYPER            (PIN_OTYPE_PUSHPULL(GPIOB_BUTTON1) |       \
-                                     PIN_OTYPE_PUSHPULL(GPIOB_BUTTON2) |       \
-                                     PIN_OTYPE_PUSHPULL(GPIOB_BUTTON3) |       \
-                                     PIN_OTYPE_PUSHPULL(GPIOB_YB24_SCK) |       \
-                                     PIN_OTYPE_PUSHPULL(GPIOB_YB24_SDO) |       \
-                                     PIN_OTYPE_PUSHPULL(GPIOB_YB24_SDI) |       \
-                                     PIN_OTYPE_OPENDRAIN(GPIOB_I2C1_SCL) |       \
-                                     PIN_OTYPE_OPENDRAIN(GPIOB_I2C1_SDA) |       \
-                                     PIN_OTYPE_PUSHPULL(GPIOB_YB24_CE) |       \
-                                     PIN_OTYPE_PUSHPULL(GPIOB_YB24_CS) |       \
-                                     PIN_OTYPE_PUSHPULL(GPIOB_OLED_DC) |      \
-                                     PIN_OTYPE_PUSHPULL(GPIOB_OLED_RES) |      \
-                                     PIN_OTYPE_PUSHPULL(GPIOB_OLED_CS) |      \
+#define VAL_GPIOB_OTYPER            (PIN_OTYPE_OPENDRAIN(GPIOB_BUTTON1) |   \
+                                     PIN_OTYPE_OPENDRAIN(GPIOB_BUTTON2) |   \
+                                     PIN_OTYPE_OPENDRAIN(GPIOB_BUTTON3) |   \
+                                     PIN_OTYPE_PUSHPULL(GPIOB_YB24_SCK) |   \
+                                     PIN_OTYPE_OPENDRAIN(GPIOB_YB24_SDO) |  \
+                                     PIN_OTYPE_PUSHPULL(GPIOB_YB24_SDI) |   \
+                                     PIN_OTYPE_OPENDRAIN(GPIOB_I2C1_SCL) |  \
+                                     PIN_OTYPE_OPENDRAIN(GPIOB_I2C1_SDA) |  \
+                                     PIN_OTYPE_PUSHPULL(GPIOB_YB24_CE) |    \
+                                     PIN_OTYPE_PUSHPULL(GPIOB_YB24_CS) |    \
+                                     PIN_OTYPE_PUSHPULL(GPIOB_OLED_DC) |    \
+                                     PIN_OTYPE_PUSHPULL(GPIOB_OLED_RES) |   \
+                                     PIN_OTYPE_PUSHPULL(GPIOB_OLED_CS) |    \
                                      PIN_OTYPE_PUSHPULL(GPIOB_OLED_SCK) |   \
-                                     PIN_OTYPE_PUSHPULL(GPIOB_PIN14) |  \
+                                     PIN_OTYPE_PUSHPULL(GPIOB_PIN14) |      \
                                      PIN_OTYPE_PUSHPULL(GPIOB_OLED_SDA))
-#define VAL_GPIOB_OSPEEDR           (PIN_OSPEED_HIGH(GPIOB_BUTTON1) |       \
-                                     PIN_OSPEED_HIGH(GPIOB_BUTTON2) |       \
-                                     PIN_OSPEED_HIGH(GPIOB_BUTTON3) |          \
-                                     PIN_OSPEED_HIGH(GPIOB_YB24_SCK) |          \
-                                     PIN_OSPEED_HIGH(GPIOB_YB24_SDO) |          \
-                                     PIN_OSPEED_HIGH(GPIOB_YB24_SDI) |       \
-                                     PIN_OSPEED_HIGH(GPIOB_I2C1_SCL) |       \
-                                     PIN_OSPEED_HIGH(GPIOB_I2C1_SDA) |       \
+#define VAL_GPIOB_OSPEEDR           (PIN_OSPEED_MEDIUM(GPIOB_BUTTON1) |     \
+                                     PIN_OSPEED_MEDIUM(GPIOB_BUTTON2) |     \
+                                     PIN_OSPEED_MEDIUM(GPIOB_BUTTON3) |     \
+                                     PIN_OSPEED_HIGH(GPIOB_YB24_SCK) |      \
+                                     PIN_OSPEED_HIGH(GPIOB_YB24_SDO) |      \
+                                     PIN_OSPEED_HIGH(GPIOB_YB24_SDI) |      \
+                                     PIN_OSPEED_HIGH(GPIOB_I2C1_SCL) |      \
+                                     PIN_OSPEED_HIGH(GPIOB_I2C1_SDA) |      \
                                      PIN_OSPEED_HIGH(GPIOB_YB24_CE) |       \
                                      PIN_OSPEED_HIGH(GPIOB_YB24_CS) |       \
-                                     PIN_OSPEED_HIGH(GPIOB_OLED_DC) |      \
+                                     PIN_OSPEED_HIGH(GPIOB_OLED_DC) |       \
                                      PIN_OSPEED_HIGH(GPIOB_OLED_RES) |      \
-                                     PIN_OSPEED_HIGH(GPIOB_OLED_CS) |      \
-                                     PIN_OSPEED_HIGH(GPIOB_OLED_SCK) |   \
-                                     PIN_OSPEED_HIGH(GPIOB_PIN14) |  \
+                                     PIN_OSPEED_HIGH(GPIOB_OLED_CS) |       \
+                                     PIN_OSPEED_HIGH(GPIOB_OLED_SCK) |      \
+                                     PIN_OSPEED_HIGH(GPIOB_PIN14) |         \
                                      PIN_OSPEED_HIGH(GPIOB_OLED_SDA))
-#define VAL_GPIOB_PUPDR             (PIN_PUPDR_FLOATING(GPIOB_BUTTON1) |         \
-                                     PIN_PUPDR_FLOATING(GPIOB_BUTTON2) |         \
-                                     PIN_PUPDR_FLOATING(GPIOB_BUTTON3) |         \
-                                     PIN_PUPDR_FLOATING(GPIOB_YB24_SCK) |         \
-                                     PIN_PUPDR_FLOATING(GPIOB_YB24_SDO) |         \
-                                     PIN_PUPDR_FLOATING(GPIOB_YB24_SDI) |         \
-                                     PIN_PUPDR_FLOATING(GPIOB_I2C1_SCL) |         \
-                                     PIN_PUPDR_FLOATING(GPIOB_I2C1_SDA) |         \
-                                     PIN_PUPDR_FLOATING(GPIOB_YB24_CE) |         \
-                                     PIN_PUPDR_FLOATING(GPIOB_YB24_CS) |         \
-                                     PIN_PUPDR_FLOATING(GPIOB_OLED_DC) |        \
-                                     PIN_PUPDR_FLOATING(GPIOB_OLED_RES) |        \
-                                     PIN_PUPDR_FLOATING(GPIOB_OLED_CS) |        \
+#define VAL_GPIOB_PUPDR             (PIN_PUPDR_PULLUP(GPIOB_BUTTON1) |      \
+                                     PIN_PUPDR_PULLUP(GPIOB_BUTTON2) |      \
+                                     PIN_PUPDR_PULLUP(GPIOB_BUTTON3) |      \
+                                     PIN_PUPDR_FLOATING(GPIOB_YB24_SCK) |   \
+                                     PIN_PUPDR_FLOATING(GPIOB_YB24_SDO) |   \
+                                     PIN_PUPDR_FLOATING(GPIOB_YB24_SDI) |   \
+                                     PIN_PUPDR_PULLUP(GPIOB_I2C1_SCL) |     \
+                                     PIN_PUPDR_PULLUP(GPIOB_I2C1_SDA) |     \
+                                     PIN_PUPDR_FLOATING(GPIOB_YB24_CE) |    \
+                                     PIN_PUPDR_FLOATING(GPIOB_YB24_CS) |    \
+                                     PIN_PUPDR_FLOATING(GPIOB_OLED_DC) |    \
+                                     PIN_PUPDR_FLOATING(GPIOB_OLED_RES) |   \
+                                     PIN_PUPDR_FLOATING(GPIOB_OLED_CS) |    \
                                      PIN_PUPDR_FLOATING(GPIOB_OLED_SCK) |   \
-                                     PIN_PUPDR_FLOATING(GPIOB_PIN14) |  \
+                                     PIN_PUPDR_FLOATING(GPIOB_PIN14) |      \
                                      PIN_PUPDR_FLOATING(GPIOB_OLED_SDA))
-#define VAL_GPIOB_ODR               (PIN_ODR_HIGH(GPIOB_BUTTON1) |             \
-                                     PIN_ODR_HIGH(GPIOB_BUTTON2) |             \
-                                     PIN_ODR_HIGH(GPIOB_BUTTON3) |             \
-                                     PIN_ODR_HIGH(GPIOB_YB24_SCK) |             \
-                                     PIN_ODR_HIGH(GPIOB_YB24_SDO) |             \
-                                     PIN_ODR_HIGH(GPIOB_YB24_SDI) |             \
-                                     PIN_ODR_HIGH(GPIOB_I2C1_SCL) |             \
-                                     PIN_ODR_HIGH(GPIOB_I2C1_SDA) |             \
-                                     PIN_ODR_HIGH(GPIOB_YB24_CE) |             \
-                                     PIN_ODR_HIGH(GPIOB_YB24_CS) |             \
-                                     PIN_ODR_HIGH(GPIOB_OLED_DC) |            \
-                                     PIN_ODR_HIGH(GPIOB_OLED_RES) |            \
-                                     PIN_ODR_HIGH(GPIOB_OLED_CS) |            \
+#define VAL_GPIOB_ODR               (PIN_ODR_HIGH(GPIOB_BUTTON1) |          \
+                                     PIN_ODR_HIGH(GPIOB_BUTTON2) |          \
+                                     PIN_ODR_HIGH(GPIOB_BUTTON3) |          \
+                                     PIN_ODR_HIGH(GPIOB_YB24_SCK) |         \
+                                     PIN_ODR_HIGH(GPIOB_YB24_SDO) |         \
+                                     PIN_ODR_HIGH(GPIOB_YB24_SDI) |         \
+                                     PIN_ODR_HIGH(GPIOB_I2C1_SCL) |         \
+                                     PIN_ODR_HIGH(GPIOB_I2C1_SDA) |         \
+                                     PIN_ODR_HIGH(GPIOB_YB24_CE) |          \
+                                     PIN_ODR_HIGH(GPIOB_YB24_CS) |          \
+                                     PIN_ODR_HIGH(GPIOB_OLED_DC) |          \
+                                     PIN_ODR_HIGH(GPIOB_OLED_RES) |         \
+                                     PIN_ODR_HIGH(GPIOB_OLED_CS) |          \
                                      PIN_ODR_HIGH(GPIOB_OLED_SCK) |         \
-                                     PIN_ODR_HIGH(GPIOB_PIN14) |        \
+                                     PIN_ODR_HIGH(GPIOB_PIN14) |            \
                                      PIN_ODR_HIGH(GPIOB_OLED_SDA))
-#define VAL_GPIOB_AFRL              (PIN_AFIO_AF(GPIOB_BUTTON1, 0U) |          \
-                                     PIN_AFIO_AF(GPIOB_BUTTON2, 0U) |          \
-                                     PIN_AFIO_AF(GPIOB_BUTTON3, 0U) |          \
-                                     PIN_AFIO_AF(GPIOB_YB24_SCK, 0U) |          \
-                                     PIN_AFIO_AF(GPIOB_YB24_SDO, 0U) |          \
-                                     PIN_AFIO_AF(GPIOB_YB24_SDI, 0U) |          \
-                                     PIN_AFIO_AF(GPIOB_I2C1_SCL, 1U) |          \
+#define VAL_GPIOB_AFRL              (PIN_AFIO_AF(GPIOB_BUTTON1, 0U) |       \
+                                     PIN_AFIO_AF(GPIOB_BUTTON2, 0U) |       \
+                                     PIN_AFIO_AF(GPIOB_BUTTON3, 0U) |       \
+                                     PIN_AFIO_AF(GPIOB_YB24_SCK, 0U) |      \
+                                     PIN_AFIO_AF(GPIOB_YB24_SDO, 0U) |      \
+                                     PIN_AFIO_AF(GPIOB_YB24_SDI, 0U) |      \
+                                     PIN_AFIO_AF(GPIOB_I2C1_SCL, 1U) |      \
                                      PIN_AFIO_AF(GPIOB_I2C1_SDA, 1U))
-#define VAL_GPIOB_AFRH              (PIN_AFIO_AF(GPIOB_YB24_CE, 0U) |          \
-                                     PIN_AFIO_AF(GPIOB_YB24_CS, 0U) |          \
-                                     PIN_AFIO_AF(GPIOB_OLED_DC, 0U) |         \
-                                     PIN_AFIO_AF(GPIOB_OLED_RES, 0U) |         \
-                                     PIN_AFIO_AF(GPIOB_OLED_CS, 0U) |         \
+#define VAL_GPIOB_AFRH              (PIN_AFIO_AF(GPIOB_YB24_CE, 0U) |       \
+                                     PIN_AFIO_AF(GPIOB_YB24_CS, 0U) |       \
+                                     PIN_AFIO_AF(GPIOB_OLED_DC, 0U) |       \
+                                     PIN_AFIO_AF(GPIOB_OLED_RES, 0U) |      \
+                                     PIN_AFIO_AF(GPIOB_OLED_CS, 0U) |       \
                                      PIN_AFIO_AF(GPIOB_OLED_SCK, 0U) |      \
-                                     PIN_AFIO_AF(GPIOB_PIN14, 0U) |     \
+                                     PIN_AFIO_AF(GPIOB_PIN14, 0U) |         \
                                      PIN_AFIO_AF(GPIOB_OLED_SDA, 0U))
 
 /*
@@ -418,22 +418,22 @@
  * PC14 - OSC32_IN                  (input floating).
  * PC15 - OSC32_OUT                 (input floating).
  */
-#define VAL_GPIOC_MODER             (PIN_MODE_OUTPUT(GPIOC_PIN13) |       \
+#define VAL_GPIOC_MODER             (PIN_MODE_OUTPUT(GPIOC_PIN13) |         \
                                      PIN_MODE_INPUT(GPIOC_OSC32_IN) |       \
                                      PIN_MODE_INPUT(GPIOC_OSC32_OUT))
-#define VAL_GPIOC_OTYPER            (PIN_OTYPE_PUSHPULL(GPIOC_PIN13) |    \
+#define VAL_GPIOC_OTYPER            (PIN_OTYPE_PUSHPULL(GPIOC_PIN13) |      \
                                      PIN_OTYPE_PUSHPULL(GPIOC_OSC32_IN) |   \
                                      PIN_OTYPE_PUSHPULL(GPIOC_OSC32_OUT))
-#define VAL_GPIOC_OSPEEDR           (PIN_OSPEED_HIGH(GPIOC_PIN13) |       \
+#define VAL_GPIOC_OSPEEDR           (PIN_OSPEED_HIGH(GPIOC_PIN13) |         \
                                      PIN_OSPEED_HIGH(GPIOC_OSC32_IN) |      \
                                      PIN_OSPEED_HIGH(GPIOC_OSC32_OUT))
-#define VAL_GPIOC_PUPDR             (PIN_PUPDR_FLOATING(GPIOC_PIN13) |    \
+#define VAL_GPIOC_PUPDR             (PIN_PUPDR_FLOATING(GPIOC_PIN13) |      \
                                      PIN_PUPDR_FLOATING(GPIOC_OSC32_IN) |   \
                                      PIN_PUPDR_FLOATING(GPIOC_OSC32_OUT))
-#define VAL_GPIOC_ODR               (PIN_ODR_HIGH(GPIOC_PIN13) |          \
+#define VAL_GPIOC_ODR               (PIN_ODR_HIGH(GPIOC_PIN13) |            \
                                      PIN_ODR_HIGH(GPIOC_OSC32_IN) |         \
                                      PIN_ODR_HIGH(GPIOC_OSC32_OUT))
-#define VAL_GPIOC_AFRH              (PIN_AFIO_AF(GPIOC_PIN13, 0U) |       \
+#define VAL_GPIOC_AFRH              (PIN_AFIO_AF(GPIOC_PIN13, 0U) |         \
                                      PIN_AFIO_AF(GPIOC_OSC32_IN, 0U) |      \
                                      PIN_AFIO_AF(GPIOC_OSC32_OUT, 0U))
 

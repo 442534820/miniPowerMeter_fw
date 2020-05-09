@@ -130,8 +130,11 @@ CSRC += driver/font.c
 CSRC += driver/ui12864.c
 CSRC += driver/ina226.c
 CSRC += driver/device_port.c
+CSRC += driver/button.c
+CSRC += app/ui.c
 
 DRIVERINC = driver
+DRIVERINC += app
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.

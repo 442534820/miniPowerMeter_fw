@@ -30,36 +30,28 @@ uint16_t bus_vot;
 int16_t shunt_vot;
 int16_t bus_cur;
 char str_buf[32];
-/*
- * Blue LED blinker thread, times are in milliseconds.
- */
-static THD_WORKING_AREA(waThread1, 512);
-static THD_FUNCTION(Thread1, arg) {
+volatile uint32_t ina_count;
 
-  (void)arg;
-  chRegSetThreadName("blinker1");
-  ina226_config(0x4527);
-  ina226_set_calibration_by_RI(500, 0.05);
-  while (true) {
-    palClearPad(GPIOA, GPIOA_LED1);
-    chThdSleepMilliseconds(10);
-    palSetPad(GPIOA, GPIOA_LED1);
-    chThdSleepMilliseconds(10);
-    ina226_read_bus_voltage(&bus_vot);
-    ina226_read_current((uint16_t*)&bus_cur);
-    ina226_read_shunt_voltage(&shunt_vot);
-    chsnprintf(str_buf, sizeof(str_buf), "%04X", bus_vot);
-    UI12864_PutString(2, 10, str_buf);
-    chsnprintf(str_buf, sizeof(str_buf), "%2.3fV", bus_vot * 0.00125f);
-    UI12864_PutString(2, 50, str_buf);
-    chsnprintf(str_buf, sizeof(str_buf), "%04X", (uint16_t)bus_cur);
-    UI12864_PutString(3, 10, str_buf);
-    chsnprintf(str_buf, sizeof(str_buf), "%4.1fmA", bus_cur * 0.05f);
-    UI12864_PutString(3, 50, str_buf);
-    chsnprintf(str_buf, sizeof(str_buf), "%04X", (uint16_t)shunt_vot);
-    UI12864_PutString(4, 10, str_buf);
-    chsnprintf(str_buf, sizeof(str_buf), "%4.2fuV", shunt_vot * 2.5f);
-    UI12864_PutString(4, 50, str_buf);
+static THD_WORKING_AREA(waThread_INA, 256);
+static THD_FUNCTION(Thread_INA, arg)
+{
+    systime_t measure_time;
+
+    (void)arg;
+    chRegSetThreadName("INA");
+    ina226_config(0x4527);
+    ina226_set_calibration_by_RI(500, 0.05);
+    measure_time = chVTGetSystemTimeX();
+    while (true) {
+        if (chVTGetSystemTimeX() - measure_time >= 200) {
+            measure_time += 200;
+
+            ina226_read_bus_voltage(&bus_vot);
+            ina226_read_current((uint16_t*)&bus_cur);
+            ina226_read_shunt_voltage((uint16_t*)&shunt_vot);
+
+            ina_count++;
+        }
 
 //    if (button_state[0] == BUTTON_STATE_RELEASE) {
 //      UI12864_PutString(4, 0, "1234");
@@ -67,42 +59,53 @@ static THD_FUNCTION(Thread1, arg) {
   }
 }
 
-/*
- * Green LED blinker thread, times are in milliseconds.
- */
-static THD_WORKING_AREA(waThread2, 128);
-static THD_FUNCTION(Thread2, arg) {
-
-  (void)arg;
-  chRegSetThreadName("blinker2");
-  while (true) {
-    palClearPad(GPIOA, GPIOA_LED2);
-    chThdSleepMilliseconds(250);
-    palSetPad(GPIOA, GPIOA_LED2);
-    chThdSleepMilliseconds(250);
-  }
-}
-
-static THD_WORKING_AREA(waThread_Btn, 64);
-static THD_FUNCTION(Thread_Btn, arg)
-{
-    (void)arg;
-    chRegSetThreadName("BtnScan");
-    button_init();
-    while (1) {
-        button_scan();
-        chThdSleepMilliseconds(100);
-    }
-}
-
-static THD_WORKING_AREA(waThread_UI, 512);
+static THD_WORKING_AREA(waThread_UI, 1024);
 static THD_FUNCTION(Thread_UI, arg)
 {
+    systime_t btn_time;
+    uint32_t last_ina_count;
+    static volatile xxx=0;
+
     (void)arg;
     chRegSetThreadName("UI");
+    button_init();
     ui_init();
+    btn_time = chVTGetSystemTimeX();
+    last_ina_count = ina_count;
     while (1) {
-        ui_main();
+        if (chVTGetSystemTimeX() - btn_time >= 50) {
+            btn_time += 50;
+            button_scan();
+        } else {
+            xxx++;
+        }
+
+        if (last_ina_count != ina_count) {
+            last_ina_count = ina_count;
+
+            palClearPad(GPIOA, GPIOA_LED1);
+            chThdSleepMilliseconds(2);
+            palSetPad(GPIOA, GPIOA_LED1);
+
+            chsnprintf(str_buf, sizeof(str_buf), "%04X", bus_vot);
+            UI12864_PutString(2, 10, str_buf);
+            chsnprintf(str_buf, sizeof(str_buf), "%2.3fV", bus_vot * 0.00125f);
+            UI12864_PutString(2, 50, str_buf);
+            chsnprintf(str_buf, sizeof(str_buf), "%04X", (uint16_t)bus_cur);
+            UI12864_PutString(3, 10, str_buf);
+            chsnprintf(str_buf, sizeof(str_buf), "%4.1fmA", bus_cur * 0.05f);
+            UI12864_PutString(3, 50, str_buf);
+            chsnprintf(str_buf, sizeof(str_buf), "%04X", (uint16_t)shunt_vot);
+            UI12864_PutString(4, 10, str_buf);
+            chsnprintf(str_buf, sizeof(str_buf), "%4.2fuV", shunt_vot * 2.5f);
+            UI12864_PutString(4, 50, str_buf);
+        }
+
+        chsnprintf(str_buf, sizeof(str_buf), "%d", btn_time);
+        UI12864_PutString(5, 10, str_buf);
+
+//        ui_main();
+//        chThdSleepMilliseconds(10);
     }
 }
 
@@ -124,7 +127,7 @@ int main(void) {
   sduObjectInit(&SDU1);
   sduStart(&SDU1, &serusbcfg);
   usbDisconnectBus(serusbcfg.usbp);
-  chThdSleepMilliseconds(1500);
+  chThdSleepMilliseconds(500);
   usbStart(serusbcfg.usbp, &usbcfg);
   usbConnectBus(serusbcfg.usbp);
 
@@ -138,13 +141,8 @@ int main(void) {
 
   dev_init();
 
-  /*
-   * Creates the blinker threads.
-   */
-  chThdCreateStatic(waThread_Btn, sizeof(waThread_Btn), NORMALPRIO, Thread_Btn, NULL);
-  //chThdCreateStatic(waThread_UI, sizeof(waThread_UI), NORMALPRIO, Thread_UI, NULL);
-  chThdCreateStatic(waThread1, sizeof(waThread1), NORMALPRIO, Thread1, NULL);
-  chThdCreateStatic(waThread2, sizeof(waThread2), NORMALPRIO, Thread2, NULL);
+  chThdCreateStatic(waThread_UI, sizeof(waThread_UI), NORMALPRIO, Thread_UI, NULL);
+  chThdCreateStatic(waThread_INA, sizeof(waThread_INA), NORMALPRIO, Thread_INA, NULL);
 
   while (true) {
     if(SDU1.config->usbp->state == USB_ACTIVE) {

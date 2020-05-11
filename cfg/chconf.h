@@ -52,7 +52,7 @@
  *          setting also defines the system tick time unit.
  */
 #if !defined(CH_CFG_ST_FREQUENCY)
-#define CH_CFG_ST_FREQUENCY                 10000
+#define CH_CFG_ST_FREQUENCY                 1000
 #endif
 
 /**
@@ -80,7 +80,7 @@
  *          this value.
  */
 #if !defined(CH_CFG_ST_TIMEDELTA)
-#define CH_CFG_ST_TIMEDELTA                 2
+#define CH_CFG_ST_TIMEDELTA                 0
 #endif
 
 /** @} */
@@ -105,7 +105,7 @@
  *          must be set to zero in that case.
  */
 #if !defined(CH_CFG_TIME_QUANTUM)
-#define CH_CFG_TIME_QUANTUM                 0
+#define CH_CFG_TIME_QUANTUM                 1
 #endif
 
 /**

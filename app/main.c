@@ -22,6 +22,7 @@
 #include "driver/device_port.h"
 #include "driver/ina226.h"
 #include "driver/button.h"
+#include "driver/button_utils.h"
 #include "ui.h"
 #include <stdio.h>
 
@@ -53,31 +54,48 @@ static THD_FUNCTION(Thread_INA, arg)
             ina_count++;
         }
 
-//    if (button_state[0] == BUTTON_STATE_RELEASE) {
-//      UI12864_PutString(4, 0, "1234");
-//    }
   }
 }
+
+struct btn_utils_info btn[4];
 
 static THD_WORKING_AREA(waThread_UI, 1024);
 static THD_FUNCTION(Thread_UI, arg)
 {
     systime_t btn_time;
     uint32_t last_ina_count;
-    static volatile xxx=0;
 
     (void)arg;
     chRegSetThreadName("UI");
     button_init();
+    btn_utils_init(&btn[0]);
+    btn_utils_init(&btn[1]);
+    btn_utils_init(&btn[2]);
+    btn_utils_init(&btn[3]);
     ui_init();
     btn_time = chVTGetSystemTimeX();
     last_ina_count = ina_count;
     while (1) {
-        if (chVTGetSystemTimeX() - btn_time >= 50) {
-            btn_time += 50;
+        if (chVTGetSystemTimeX() - btn_time >= 20) {
+            btn_time += 20;
             button_scan();
-        } else {
-            xxx++;
+            btn_utils_process(&btn[0], button_state[0]);
+            if (btn[0].event.short_press) {
+                btn[0].event.short_press = 0;
+                UI12864_PutString(6, 0, "Short ");
+            }
+            if (btn[0].event.long_press) {
+                btn[0].event.long_press = 0;
+                UI12864_PutString(6, 0, "Long  ");
+            }
+            if (btn[0].event.long_press_ex) {
+                btn[0].event.long_press_ex = 0;
+                UI12864_PutString(6, 0, "LongEx");
+            }
+            if (btn[0].event.double_press) {
+                btn[0].event.double_press = 0;
+                UI12864_PutString(6, 0, "Double");
+            }
         }
 
         if (last_ina_count != ina_count) {

@@ -131,6 +131,7 @@ CSRC += driver/ui12864.c
 CSRC += driver/ina226.c
 CSRC += driver/device_port.c
 CSRC += driver/button.c
+CSRC += driver/button_utils.c
 CSRC += app/ui.c
 
 DRIVERINC = driver

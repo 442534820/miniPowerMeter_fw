@@ -49,7 +49,6 @@ void btn_utils_process(struct btn_utils_info *pbtn, unsigned char btn_base_event
     case BUTTON_STATE_RELEASE:
         if (pbtn->flags.long_triged) {
             pbtn->flags.long_triged = 0;
-//            pbtn->flags.pressed = 0; //TODO
             //No events generated
         } else {
             if (pbtn->flags.pressed == 0) {

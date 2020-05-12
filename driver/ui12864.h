@@ -1,6 +1,7 @@
 #ifndef __UI12864_H__
 #define __UI12864_H__
 
+#include <stdint.h>
 #include "oled.h"
 
 

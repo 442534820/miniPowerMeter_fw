@@ -90,7 +90,7 @@ uint8_t button_3_read(void)
 
 uint8_t button_4_read(void)
 {
-    if (palReadPort(GPIOA) & (1 << 15))
+    if (!(palReadPort(GPIOA) & (1 << 15)))
         return BUTTON_UP;
     else
         return BUTTON_DOWN;

@@ -32,8 +32,22 @@ volatile int16_t shunt_vot;
 volatile int16_t bus_cur;
 volatile uint32_t ina_count;
 volatile int32_t cap_sum;
+static semaphore_t sem1;
+static void measure_trig(void *param);
+static GPTConfig gpt3cfg = {
+	1000,
+	measure_trig
+};
 
 #define INA_MEASURE_PERIOD  200  //200ms
+static void measure_trig(void *param)
+{
+	(void)param;
+
+	chSemSignalI(&sem1);
+	palClearPad(GPIOA, GPIOA_LED2);
+}
+
 static THD_WORKING_AREA(waThread_INA, 256);
 static THD_FUNCTION(Thread_INA, arg)
 {
@@ -44,17 +58,18 @@ static THD_FUNCTION(Thread_INA, arg)
 	ina226_config(0x4527);
 	ina226_set_calibration_by_RI(500, 0.05);
 	measure_time = chVTGetSystemTimeX();
+	chSemObjectInit(&sem1, 0);
+	gptStart(&GPTD3, &gpt3cfg);
+	gptStartContinuous(&GPTD3, INA_MEASURE_PERIOD);
 	while (true) {
-		if (chVTGetSystemTimeX() - measure_time >= INA_MEASURE_PERIOD) {
-			measure_time += INA_MEASURE_PERIOD;
+		chSemWait(&sem1);
+		ina226_read_bus_voltage((uint16_t*)&bus_vot);
+		ina226_read_current((uint16_t*)&bus_cur);
+		ina226_read_shunt_voltage((uint16_t*)&shunt_vot);
+		cap_sum += bus_cur * INA_MEASURE_PERIOD;
 
-			ina226_read_bus_voltage((uint16_t*)&bus_vot);
-			ina226_read_current((uint16_t*)&bus_cur);
-			ina226_read_shunt_voltage((uint16_t*)&shunt_vot);
-			cap_sum += bus_cur * INA_MEASURE_PERIOD;
-
-			ina_count++;
-		}
+		ina_count++;
+		palSetPad(GPIOA, GPIOA_LED2);
 	}
 }
 

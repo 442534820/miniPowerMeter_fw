@@ -14,6 +14,7 @@ extern volatile uint16_t bus_vot;
 extern volatile int16_t shunt_vot;
 extern volatile int16_t bus_cur;
 extern volatile uint32_t ina_count;
+extern volatile int32_t cap_sum;
 
 #define UI_ID_MAIN 0x00
 #define UI_ID_TEST 0xFF
@@ -65,16 +66,18 @@ void ui_main(void)
 			chThdSleepMilliseconds(2);
 			palSetPad(GPIOA, GPIOA_LED1);
 
-			chsnprintf(str_buf, sizeof(str_buf), "%2.3fV", bus_vot * 0.00125f);
+			chsnprintf(str_buf, sizeof(str_buf), "%5.3fV", bus_vot * 0.00125f);
 			UI12864_PutString(2, 40, str_buf);
 			if (bus_cur < 0) {
 				str_buf[0] = '-';
-				chsnprintf(str_buf, sizeof(str_buf), "%4.1fmA", -1 * bus_cur * 0.05f);
+				chsnprintf(str_buf + 1, sizeof(str_buf), "%5.1fmA", -1 * bus_cur * 0.05f);
 			} else {
 				str_buf[0] = ' ';
-				chsnprintf(str_buf, sizeof(str_buf), "%4.1fmA", bus_cur * 0.05f);
+				chsnprintf(str_buf + 1, sizeof(str_buf), "%5.1fmA", bus_cur * 0.05f);
 			}
 			UI12864_PutString(4, 40, str_buf);
+			chsnprintf(str_buf, sizeof(str_buf), "%6.3fmAh", cap_sum * 0.05 / 1000.0 / 3600.0);
+			UI12864_PutString(6, 40, str_buf);
 #if 0
 			chsnprintf(str_buf, sizeof(str_buf), "%04X", bus_vot);
 			UI12864_PutString(2, 10, str_buf);

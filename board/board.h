@@ -195,7 +195,7 @@
  * PA12 - USB_DP                    (input floating).
  * PA13 - SWDIO                     (alternate 0).
  * PA14 - SWCLK                     (alternate 0).
- * PA15 - BUTTON4                   (input pullup).
+ * PA15 - BUTTON4                   (input pulldown).
  */
 #define VAL_GPIOA_MODER             (PIN_MODE_OUTPUT(GPIOA_LED1) |          \
                                      PIN_MODE_OUTPUT(GPIOA_LED2) |          \
@@ -260,7 +260,7 @@
                                      PIN_PUPDR_FLOATING(GPIOA_USB_DP) |     \
                                      PIN_PUPDR_PULLUP(GPIOA_SWDIO) |        \
                                      PIN_PUPDR_PULLDOWN(GPIOA_SWCLK) |      \
-                                     PIN_PUPDR_PULLUP(GPIOA_BUTTON4))
+                                     PIN_PUPDR_PULLDOWN(GPIOA_BUTTON4))
 #define VAL_GPIOA_ODR               (PIN_ODR_HIGH(GPIOA_LED1) |             \
                                      PIN_ODR_HIGH(GPIOA_LED2) |             \
                                      PIN_ODR_HIGH(GPIOA_UART2_TX) |         \

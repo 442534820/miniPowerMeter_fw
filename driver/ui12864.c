@@ -209,7 +209,7 @@ void UI12864_PutCharReverse(uint8_t Page, uint8_t Column, char Char)
 	}
 }
 
-void UI12864_PutString(uint8_t Page, uint8_t Column, char *pStr)
+void UI12864_PutString(uint8_t Page, uint8_t Column, const char *pStr)
 {
 	while (*pStr) {
 		UI12864_PutChar(Page, Column, *pStr);

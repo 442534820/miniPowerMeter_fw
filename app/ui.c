@@ -1,5 +1,6 @@
 #include "ui.h"
 #include "font.h"
+#include "measure.h"
 #include "button.h"
 #include "button_utils.h"
 #include "ui12864.h"
@@ -10,21 +11,37 @@
 #include <string.h>
 
 
-extern volatile uint16_t bus_vot;
-extern volatile int16_t shunt_vot;
-extern volatile int16_t bus_cur;
-extern volatile uint32_t ina_count;
-extern volatile int32_t cap_sum;
-
 #define UI_ID_MAIN 0x00
 #define UI_ID_TEST 0xFF
 uint8_t ui_id;
+uint8_t measure_running;
 
 char str_buf[32];
 systime_t btn_time;
 uint32_t last_ina_count;
 struct btn_utils_info btn[4];
 const font_t *pfont;
+
+#define VIEW_CAPTION3_NUM  4
+const char* const ViewCaption3[VIEW_CAPTION3_NUM] = {
+	"Cap=",
+	"RaI=",
+	"RaU=",
+	"RaC="
+};
+
+
+static THD_WORKING_AREA(waThread_UI, 1024);
+static THD_FUNCTION(Thread_UI, arg)
+{
+	(void)arg;
+	chRegSetThreadName("UI");
+	measure_start();
+	measure_running = 1;
+	ui_entry();
+	/* Never reach here */
+	while (1);
+}
 
 void ui_init(void)
 {
@@ -35,17 +52,20 @@ void ui_init(void)
 	btn_utils_init(&btn[3]);
 
 	UI12864_Init();
+	chThdCreateStatic(waThread_UI, sizeof(waThread_UI), NORMALPRIO, Thread_UI, NULL);
 }
 
 void ui_main(void)
 {
+	static uint8_t view_mode = 0;
+
 	UI12864_Clear();
 	pfont = UI12864_FontSave(&font_5x8_ascii);
 	UI12864_PutString(0, 10, "miniPowerMeter");
 	UI12864_FontRestore(&font_8x16_ascii);
 	UI12864_PutString(2, 4, "Vot=");
 	UI12864_PutString(4, 4, "Cur=");
-	UI12864_PutString(6, 4, "Cap=");
+	UI12864_PutString(6, 4, ViewCaption3[view_mode]);
 	btn_time = chVTGetSystemTimeX();
 	last_ina_count = ina_count;
 	while (1) {
@@ -56,6 +76,27 @@ void ui_main(void)
 				ui_id = UI_ID_TEST;
 				UI12864_FontRestore(pfont);
 				return;
+			}
+			if (button_state[2] == BUTTON_STATE_RELEASE) {
+				view_mode = (view_mode + 1) % VIEW_CAPTION3_NUM;
+				UI12864_PutString(6, 40, "          ");
+				UI12864_PutString(6, 4, ViewCaption3[view_mode]);
+			}
+			if (button_state[1] == BUTTON_STATE_RELEASE) {
+				if (view_mode == 0)
+					view_mode = VIEW_CAPTION3_NUM;
+				view_mode--;
+				UI12864_PutString(6, 40, "          ");
+				UI12864_PutString(6, 4, ViewCaption3[view_mode]);
+			}
+			if (button_state[0] == BUTTON_STATE_RELEASE) {
+				if (measure_running) {
+					measure_running = 0;
+					measure_stop();
+				} else {
+					measure_running = 1;
+					measure_start();
+				}
 			}
 		}
 
@@ -76,8 +117,24 @@ void ui_main(void)
 				chsnprintf(str_buf + 1, sizeof(str_buf), "%5.1fmA", bus_cur * 0.05f);
 			}
 			UI12864_PutString(4, 40, str_buf);
-			chsnprintf(str_buf, sizeof(str_buf), "%6.3fmAh", cap_sum * 0.05 / 1000.0 / 3600.0);
-			UI12864_PutString(6, 40, str_buf);
+			switch (view_mode) {
+			case 0 :
+				chsnprintf(str_buf, sizeof(str_buf), "%6.3fmAh", cap_sum * 0.05 / 1000.0 / 3600.0);
+				UI12864_PutString(6, 40, str_buf);
+				break;
+			case 1:
+				chsnprintf(str_buf, sizeof(str_buf), "%04X", bus_cur);
+				UI12864_PutString(6, 40, str_buf);
+				break;
+			case 2:
+				chsnprintf(str_buf, sizeof(str_buf), "%4.2fuV", shunt_vot * 2.5f);
+				UI12864_PutString(6, 40, str_buf);
+				break;
+			case 3:
+				chsnprintf(str_buf, sizeof(str_buf), "%d", cap_sum);
+				UI12864_PutString(6, 40, str_buf);
+				break;
+			}
 #if 0
 			chsnprintf(str_buf, sizeof(str_buf), "%04X", bus_vot);
 			UI12864_PutString(2, 10, str_buf);
@@ -153,10 +210,8 @@ void ui_test(void)
 				}
 			}
 		}
-
 	}
 }
-
 
 void ui_entry(void)
 {

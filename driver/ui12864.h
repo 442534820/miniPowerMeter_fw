@@ -20,7 +20,7 @@ typedef struct
 extern void UI12864_Init(void);
 extern void UI12864_PutChar(uint8_t Page, uint8_t Column, char Char);
 extern void UI12864_PutCharReverse(uint8_t Page, uint8_t Column, char Char);
-extern void UI12864_PutString(uint8_t Page, uint8_t Column, char *pStr);
+extern void UI12864_PutString(uint8_t Page, uint8_t Column, const char *pStr);
 //extern void UI12864_DrawRect(uint8_t Page, uint8_t Column, uint8_t Height, uint8_t Width, const uint8_t *pData);
 //extern void UI12864_DrawBitmap(uint8_t Page, uint8_t Column, const UI12864_Bitmap_Type *pBitmapData);
 extern void UI12864_Fill(uint8_t Page, uint8_t Column, uint8_t Height, uint8_t Width, uint8_t FillData);

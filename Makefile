@@ -133,6 +133,7 @@ CSRC += driver/device_port.c
 CSRC += driver/button.c
 CSRC += driver/button_utils.c
 CSRC += app/ui.c
+CSRC += app/measure.c
 
 DRIVERINC = driver
 DRIVERINC += app

@@ -189,6 +189,7 @@ void UI12864_PutChar(uint8_t Page, uint8_t Column, char Char)
 		for (i=0; i<w; i++) {
 			oled_UpdateWordPixcels(Page + j, Column + i, font_ptr[i + j * w]);
 		}
+		oled_UpdateWordPixcels(Page + j, Column + i, 0x00);
 	}
 }
 
@@ -206,6 +207,7 @@ void UI12864_PutCharReverse(uint8_t Page, uint8_t Column, char Char)
 		for (i=0; i<w; i++) {
 			oled_UpdateWordPixcels(Page + j, Column + i, ~font_ptr[i + j * w]);
 		}
+		oled_UpdateWordPixcels(Page + j, Column + i, 0xFF);
 	}
 }
 
@@ -213,6 +215,19 @@ void UI12864_PutString(uint8_t Page, uint8_t Column, const char *pStr)
 {
 	while (*pStr) {
 		UI12864_PutChar(Page, Column, *pStr);
+		pStr++;
+		Column += ui_font->width + 1;
+		if (Column >= 128 - ui_font->width) {
+			Page += (ui_font->height - 1) / 8 + 1;
+			Column = 0;
+		}
+	}
+}
+
+void UI12864_PutStringReverse(uint8_t Page, uint8_t Column, const char *pStr)
+{
+	while (*pStr) {
+		UI12864_PutCharReverse(Page, Column, *pStr);
 		pStr++;
 		Column += ui_font->width + 1;
 		if (Column >= 128 - ui_font->width) {

@@ -11,6 +11,7 @@ extern volatile int32_t cap_sum;
 
 void measure_init(void);
 void measure_set_period(uint16_t period);
+uint16_t measure_get_period(void);
 void measure_start(void);
 void measure_stop(void);
 void measure_clear(void);

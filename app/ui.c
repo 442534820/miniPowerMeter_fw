@@ -11,16 +11,26 @@
 #include <string.h>
 
 
-#define UI_ID_MAIN 0x00
-#define UI_ID_TEST 0xFF
-uint8_t ui_id;
-uint8_t measure_running;
+#define UI_ID_MAIN    0x00
+#define UI_ID_MENU_1  0x10
+#define UI_ID_TEST    0xFF
+static uint8_t ui_id;
+static uint8_t measure_running;
 
 char str_buf[32];
 systime_t btn_time;
 uint32_t last_ina_count;
 struct btn_utils_info btn[4];
 const font_t *pfont;
+
+union {
+	uint8_t   d_u8;
+	int8_t    d_i8;
+	uint16_t  d_u16;
+	int16_t   d_i16;
+	uint32_t  d_u32;
+	int32_t   d_i32;
+}edit_value;
 
 #define VIEW_CAPTION3_NUM  4
 const char* const ViewCaption3[VIEW_CAPTION3_NUM] = {
@@ -73,7 +83,7 @@ void ui_main(void)
 			btn_time += 20;
 			button_scan();
 			if (button_state[3] == BUTTON_STATE_RELEASE) {
-				ui_id = UI_ID_TEST;
+				ui_id = UI_ID_MENU_1;
 				UI12864_FontRestore(pfont);
 				return;
 			}
@@ -213,6 +223,202 @@ void ui_test(void)
 	}
 }
 
+#define MENU_BORDER_TOP 2
+#define MENU_BORDER_LEF 0
+#define MENU_BORDER_HEIGHT 6
+
+#define MENU_1_COUNT 4
+const char* const MENU_1_STRINGS[MENU_1_COUNT] = {
+	"..    ",
+	"Period",
+	"Led   ",
+	"Clear ",
+};
+
+void ui_menu_1_update(uint8_t menu_off, uint8_t menu_index)
+{
+	uint8_t i;
+
+	for (i=0; i<MENU_BORDER_HEIGHT; i++) {
+		if (i+menu_off >= MENU_1_COUNT)
+			return;
+		if (i+menu_off == menu_index)
+			UI12864_PutStringReverse(i+MENU_BORDER_TOP,
+					MENU_BORDER_LEF,
+					MENU_1_STRINGS[menu_index]);
+		else
+			UI12864_PutString(i+MENU_BORDER_TOP,
+					MENU_BORDER_LEF,
+					MENU_1_STRINGS[i+menu_off]);
+	}
+}
+
+void ui_menu_1_view_value(void)
+{
+	chsnprintf(str_buf, sizeof(str_buf), "%6d", measure_get_period());
+	UI12864_PutString(3, 64, str_buf);
+	UI12864_PutString(4, 64, "ON ");
+}
+
+uint8_t ui_menu_1_tune(uint8_t button_index)
+{
+	static uint8_t menu_off = 0;
+	static uint8_t menu_cursor = 0;
+	static uint8_t menu_selected = 0;
+	uint8_t ret = 0;
+	uint8_t changed = 0;
+
+	if (menu_selected) {
+		switch (menu_cursor) {
+		case 0:
+			break; //Error '..' can not be selected
+		case 1:
+			switch (button_index) {
+			case 0:
+				/* Abort period edit */
+				edit_value.d_u16 = measure_get_period();
+				chsnprintf(str_buf, sizeof(str_buf), "%6d", edit_value.d_u16);
+				UI12864_PutString(3, 64, str_buf);
+				menu_selected = 0;
+				break;
+			case 1:
+				/* Decrease period value */
+				if (edit_value.d_u16 > 2) {
+					edit_value.d_u16--;
+					chsnprintf(str_buf, sizeof(str_buf), "%6d", edit_value.d_u16);
+					UI12864_PutStringReverse(3, 64, str_buf);
+				}
+				break;
+			case 2:
+				/* Increase period value */
+				if (edit_value.d_u16 < 60000) {
+					chsnprintf(str_buf, sizeof(str_buf), "%6d", edit_value.d_u16);
+					UI12864_PutStringReverse(3, 64, str_buf);
+					edit_value.d_u16++;
+				}
+				break;
+			case 3:
+				/* Apply period edit */
+				measure_set_period(edit_value.d_u16);
+				chsnprintf(str_buf, sizeof(str_buf), "%6d", edit_value.d_u16);
+				UI12864_PutString(3, 64, str_buf);
+				menu_selected = 0;
+				break;
+			}
+			break;
+		case 2:
+			switch (button_index) {
+			case 0:
+				/* Abort LED switch */
+				UI12864_PutString(4, 64, "ON ");
+				menu_selected = 0;
+				break;
+			case 1:
+			case 2:
+				/* Switch LED ON/OFF */
+				edit_value.d_u8 = !edit_value.d_u8;
+				if (edit_value.d_u8) {
+					UI12864_PutStringReverse(4, 64, "ON ");
+				} else {
+					UI12864_PutStringReverse(4, 64, "OFF");
+				}
+				break;
+			case 3:
+				/* Aplly LED switch */
+				// TODO
+				UI12864_PutString(4, 64, "ON ");
+				menu_selected = 0;
+				break;
+			}
+			break;
+		case 3:
+			break; //Error 'Clear' can not be selected
+		}
+	} else {
+		switch (button_index) {
+		case 0:
+			/* Turn back */
+			return 0xFF;
+		case 1:
+			/* Cursor up */
+			if (menu_cursor > 0)
+				menu_cursor--;
+			else
+				menu_cursor = MENU_1_COUNT-1;
+			changed = 1;
+			break;
+		case 2:
+			/* Cursor down */
+			if (menu_cursor < MENU_1_COUNT-1)
+				menu_cursor++;
+			else
+				menu_cursor = 0;
+			changed = 1;
+			break;
+		case 3:
+			/* Enter or select */
+			switch (menu_cursor) {
+			case 0:
+				/* Turn back */
+				return 0xFF;
+			case 1:
+				edit_value.d_u8 = measure_get_period();
+				chsnprintf(str_buf, sizeof(str_buf), "%6d", edit_value.d_u16);
+				UI12864_PutStringReverse(3, 64, str_buf);
+				menu_selected = 1;
+				break;
+			case 2:
+				edit_value.d_u8 = 0; //TODO
+				if (edit_value.d_u8) {
+					UI12864_PutStringReverse(4, 64, "ON ");
+				} else {
+					UI12864_PutStringReverse(4, 64, "OFF");
+				}
+				menu_selected = 1;
+				break;
+			case 3:
+				/* Clear capacity acc */
+				measure_clear();
+				break;
+			}
+			break;
+		}
+	}
+	if (changed) {
+		ui_menu_1_update(menu_off, menu_cursor);
+	}
+
+	return ret;
+}
+
+void ui_menu(void)
+{
+	uint8_t ret;
+	uint8_t i;
+
+	UI12864_Clear();
+	pfont = UI12864_FontSave(&font_5x8_ascii);
+	UI12864_PutString(0, 10, "Sys Conifg");
+	ui_menu_1_update(0, 0);
+	ui_menu_1_view_value();
+	btn_time = chVTGetSystemTimeX();
+	while (1) {
+		if (chVTGetSystemTimeX() - btn_time >= 20) {
+			btn_time += 20;
+			button_scan();
+			for (i=0; i<4; i++) {
+				if (button_state[i] == BUTTON_STATE_RELEASE) {
+					ret = ui_menu_1_tune(i);
+					if (ret == 0xFF) {
+						ui_id = UI_ID_MAIN;
+						return;
+					}
+				}
+			}
+		}
+	}
+}
+
 void ui_entry(void)
 {
 	ui_id = UI_ID_MAIN;
@@ -221,6 +427,9 @@ void ui_entry(void)
 		switch (ui_id) {
 		case UI_ID_MAIN:
 			ui_main();
+			break;
+		case UI_ID_MENU_1:
+			ui_menu();
 			break;
 		case UI_ID_TEST:
 			ui_test();

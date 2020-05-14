@@ -4,7 +4,7 @@
 #include "driver/ina226.h"
 
 
-#define INA_MEASURE_PERIOD  200  //200ms
+#define INA_MEASURE_PERIOD  100  //100ms
 
 volatile uint16_t bus_vot;
 volatile int16_t shunt_vot;
@@ -62,6 +62,11 @@ void measure_init(void)
 void measure_set_period(uint16_t period)
 {
 	trig_period = period;
+}
+
+uint16_t measure_get_period(void)
+{
+	return trig_period;
 }
 
 void measure_start(void)

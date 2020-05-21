@@ -19,6 +19,7 @@ static uint8_t measure_running;
 
 char str_buf[32];
 systime_t btn_time;
+systime_t view_time;
 uint32_t last_ina_count;
 struct btn_utils_info btn[4];
 const font_t *pfont;
@@ -77,6 +78,7 @@ void ui_main(void)
 	UI12864_PutString(4, 4, "Cur=");
 	UI12864_PutString(6, 4, ViewCaption3[view_mode]);
 	btn_time = chVTGetSystemTimeX();
+	view_time = chVTGetSystemTimeX();
 	last_ina_count = ina_count;
 	while (1) {
 		if (chVTGetSystemTimeX() - btn_time >= 20) {
@@ -110,8 +112,9 @@ void ui_main(void)
 			}
 		}
 
-		if (last_ina_count != ina_count) {
+		if ((last_ina_count != ina_count) && (chVTGetSystemTimeX() - view_time >= 200)) {
 			last_ina_count = ina_count;
+			view_time += 200;
 
 			palClearPad(GPIOA, GPIOA_LED1);
 			chThdSleepMilliseconds(2);
@@ -145,20 +148,6 @@ void ui_main(void)
 				UI12864_PutString(6, 40, str_buf);
 				break;
 			}
-#if 0
-			chsnprintf(str_buf, sizeof(str_buf), "%04X", bus_vot);
-			UI12864_PutString(2, 10, str_buf);
-			chsnprintf(str_buf, sizeof(str_buf), "%2.3fV", bus_vot * 0.00125f);
-			UI12864_PutString(2, 50, str_buf);
-			chsnprintf(str_buf, sizeof(str_buf), "%04X", (uint16_t)bus_cur);
-			UI12864_PutString(3, 10, str_buf);
-			chsnprintf(str_buf, sizeof(str_buf), "%4.1fmA", bus_cur * 0.05f);
-			UI12864_PutString(3, 50, str_buf);
-			chsnprintf(str_buf, sizeof(str_buf), "%04X", (uint16_t)shunt_vot);
-			UI12864_PutString(4, 10, str_buf);
-			chsnprintf(str_buf, sizeof(str_buf), "%4.2fuV", shunt_vot * 2.5f);
-			UI12864_PutString(4, 50, str_buf);
-#endif
 		}
 	}
 }
@@ -257,10 +246,13 @@ void ui_menu_1_view_value(void)
 {
 	chsnprintf(str_buf, sizeof(str_buf), "%6d", measure_get_period());
 	UI12864_PutString(3, 64, str_buf);
-	UI12864_PutString(4, 64, "ON ");
+	UI12864_PutString(4, 64, "    ON");
 }
 
-uint8_t ui_menu_1_tune(uint8_t button_index)
+/*
+ * trig_type : 0=normal trig  1=continuous trig
+ */
+uint8_t ui_menu_1_tune(uint8_t button_index, uint8_t trig_type)
 {
 	static uint8_t menu_off = 0;
 	static uint8_t menu_cursor = 0;
@@ -300,6 +292,8 @@ uint8_t ui_menu_1_tune(uint8_t button_index)
 			case 3:
 				/* Apply period edit */
 				measure_set_period(edit_value.d_u16);
+				measure_stop();
+				measure_start();
 				chsnprintf(str_buf, sizeof(str_buf), "%6d", edit_value.d_u16);
 				UI12864_PutString(3, 64, str_buf);
 				menu_selected = 0;
@@ -310,7 +304,7 @@ uint8_t ui_menu_1_tune(uint8_t button_index)
 			switch (button_index) {
 			case 0:
 				/* Abort LED switch */
-				UI12864_PutString(4, 64, "ON ");
+				UI12864_PutString(4, 64, "    ON");
 				menu_selected = 0;
 				break;
 			case 1:
@@ -318,15 +312,15 @@ uint8_t ui_menu_1_tune(uint8_t button_index)
 				/* Switch LED ON/OFF */
 				edit_value.d_u8 = !edit_value.d_u8;
 				if (edit_value.d_u8) {
-					UI12864_PutStringReverse(4, 64, "ON ");
+					UI12864_PutStringReverse(4, 64, "    ON");
 				} else {
-					UI12864_PutStringReverse(4, 64, "OFF");
+					UI12864_PutStringReverse(4, 64, "   OFF");
 				}
 				break;
 			case 3:
 				/* Aplly LED switch */
 				// TODO
-				UI12864_PutString(4, 64, "ON ");
+				UI12864_PutString(4, 64, "    ON");
 				menu_selected = 0;
 				break;
 			}
@@ -370,9 +364,9 @@ uint8_t ui_menu_1_tune(uint8_t button_index)
 			case 2:
 				edit_value.d_u8 = 0; //TODO
 				if (edit_value.d_u8) {
-					UI12864_PutStringReverse(4, 64, "ON ");
+					UI12864_PutStringReverse(4, 64, "    ON");
 				} else {
-					UI12864_PutStringReverse(4, 64, "OFF");
+					UI12864_PutStringReverse(4, 64, "   OFF");
 				}
 				menu_selected = 1;
 				break;
@@ -406,9 +400,18 @@ void ui_menu(void)
 		if (chVTGetSystemTimeX() - btn_time >= 20) {
 			btn_time += 20;
 			button_scan();
+			/* Just process + - button */
+			btn_utils_process(&btn[1], button_state[1]);
+			btn_utils_process(&btn[2], button_state[2]);
+			for (i=1; i<=2; i++) {
+				if (btn[i].event.long_press_ex) {
+					btn[i].event.long_press_ex = 0;
+					ui_menu_1_tune(i, 1);
+				}
+			}
 			for (i=0; i<4; i++) {
 				if (button_state[i] == BUTTON_STATE_RELEASE) {
-					ret = ui_menu_1_tune(i);
+					ret = ui_menu_1_tune(i, 0);
 					if (ret == 0xFF) {
 						ui_id = UI_ID_MAIN;
 						return;

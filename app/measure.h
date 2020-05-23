@@ -8,7 +8,7 @@ extern volatile uint16_t bus_vot;
 extern volatile int16_t shunt_vot;
 extern volatile int16_t bus_cur;
 extern volatile uint32_t ina_count;
-extern volatile int32_t cap_sum;
+extern volatile int64_t cap_sum;
 
 #define MEASURE_LOG_DATA_LEN  256
 extern volatile uint16_t log_data[MEASURE_LOG_DATA_LEN];

@@ -131,10 +131,41 @@ void ui_main(void)
 			}
 			UI12864_PutString(4, 40, str_buf);
 			switch (view_mode) {
-			case 0 :
-				chsnprintf(str_buf, sizeof(str_buf), "%6.3fmAh", cap_sum * 0.05 / 1000.0 / 3600.0);
+			case 0 : {
+				float cap_val = cap_sum * 0.05 / 1000.0 / 3600.0; //Convert to mAh
+				if (cap_val >= 1000000)
+					chsnprintf(str_buf, sizeof(str_buf), "--over--mAh");
+				else if (cap_val >= 100000)
+					chsnprintf(str_buf, sizeof(str_buf), "%6.0fmAh", cap_val);
+				else if (cap_val >= 10000)
+					chsnprintf(str_buf, sizeof(str_buf), "%6.1fmAh", cap_val);
+				else if (cap_val >= 1000)
+					chsnprintf(str_buf, sizeof(str_buf), "%6.2fmAh", cap_val);
+				else if (cap_val >= 100)
+					chsnprintf(str_buf, sizeof(str_buf), "%6.3fmAh", cap_val);
+				else if (cap_val >= 10)
+					chsnprintf(str_buf, sizeof(str_buf), "%6.4fmAh", cap_val);
+				else if (cap_val >= 1)
+					chsnprintf(str_buf, sizeof(str_buf), "%6.5fmAh", cap_val);
+				else if (cap_val >= 0)
+					chsnprintf(str_buf, sizeof(str_buf), "%6.6fmAh", cap_val);
+				else if (cap_val > -1)
+					chsnprintf(str_buf, sizeof(str_buf), "%5.5fmAh", cap_val);
+				else if (cap_val > -10)
+					chsnprintf(str_buf, sizeof(str_buf), "%5.4fmAh", cap_val);
+				else if (cap_val > -100)
+					chsnprintf(str_buf, sizeof(str_buf), "%5.3fmAh", cap_val);
+				else if (cap_val > -1000)
+					chsnprintf(str_buf, sizeof(str_buf), "%5.2fmAh", cap_val);
+				else if (cap_val > -10000)
+					chsnprintf(str_buf, sizeof(str_buf), "%5.1fmAh", cap_val);
+				else if (cap_val > -100000)
+					chsnprintf(str_buf, sizeof(str_buf), "%5.0fmAh", cap_val);
+				else
+					chsnprintf(str_buf, sizeof(str_buf), "--over--mAh");
 				UI12864_PutString(6, 40, str_buf);
 				break;
+				}
 			case 1:
 				chsnprintf(str_buf, sizeof(str_buf), "%04X", bus_cur);
 				UI12864_PutString(6, 40, str_buf);

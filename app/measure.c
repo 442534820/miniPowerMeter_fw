@@ -8,7 +8,7 @@ volatile uint16_t bus_vot;
 volatile int16_t shunt_vot;
 volatile int16_t bus_cur;
 volatile uint32_t ina_count;
-volatile int32_t cap_sum;
+volatile int64_t cap_sum;
 
 volatile uint16_t log_data[MEASURE_LOG_DATA_LEN];
 volatile uint16_t log_data_read_ptr;

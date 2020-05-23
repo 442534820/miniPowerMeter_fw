@@ -63,12 +63,23 @@ int main(void) {
 	while (true) {
 		if(SDU1.config->usbp->state == USB_ACTIVE) {
 			chprintf((BaseSequentialStream*)&SDU1, "miniPowerMeter Connected!\n");
+			log_data_switch = 1;
 			while (true) {
 				if(SDU1.config->usbp->state != USB_ACTIVE) {
+					log_data_switch = 0;
 					break;
 				}
-				chThdSleepMilliseconds(1000);
-				chprintf((BaseSequentialStream*)&SDU1, "%d\r\n", connect_count);
+				if (log_data_write_ptr != log_data_read_ptr) {
+					streamPut((BaseSequentialStream*)&SDU1, 0xA5);
+					streamPut((BaseSequentialStream*)&SDU1, log_data[log_data_read_ptr] & 0xFF);
+					streamPut((BaseSequentialStream*)&SDU1, log_data[log_data_read_ptr] >> 8);
+					if (log_data_read_ptr >= MEASURE_LOG_DATA_LEN)
+						log_data_read_ptr = 0;
+					else
+						log_data_read_ptr++;
+				} else {
+					chThdSleepMilliseconds(100);
+				}
 			}
 		}
 		chThdSleepMilliseconds(500);

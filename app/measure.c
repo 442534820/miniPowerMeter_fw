@@ -4,13 +4,17 @@
 #include "driver/ina226.h"
 
 
-#define INA_MEASURE_PERIOD  200  //200ms
-
 volatile uint16_t bus_vot;
 volatile int16_t shunt_vot;
 volatile int16_t bus_cur;
 volatile uint32_t ina_count;
-volatile int32_t cap_sum;
+volatile int64_t cap_sum;
+volatile systime_t measure_timestamp;
+
+volatile uint16_t log_data[MEASURE_LOG_DATA_LEN];
+volatile uint16_t log_data_read_ptr;
+volatile uint16_t log_data_write_ptr;
+volatile uint8_t log_data_switch;
 
 static uint16_t trig_period = INA_MEASURE_PERIOD;
 static semaphore_t sem1;
@@ -51,6 +55,15 @@ static THD_FUNCTION(Thread_INA, arg)
 
 		ina_count++;
 		palSetPad(GPIOA, GPIOA_LED2);
+
+		/* log data */
+		if (log_data_switch) {
+			log_data[log_data_write_ptr] = bus_cur;
+			if (log_data_write_ptr >= MEASURE_LOG_DATA_LEN - 1)
+				log_data_write_ptr = 0;
+			else
+				log_data_write_ptr++;
+		}
 	}
 }
 
@@ -64,8 +77,19 @@ void measure_set_period(uint16_t period)
 	trig_period = period;
 }
 
+uint16_t measure_get_period(void)
+{
+	return trig_period;
+}
+
+uint32_t measure_get_time_seconds(void)
+{
+	return (chVTGetSystemTimeX() - measure_timestamp) / 1000;
+}
+
 void measure_start(void)
 {
+	measure_timestamp = chVTGetSystemTimeX();
 	gptStartContinuous(&GPTD3, trig_period);
 }
 
@@ -77,5 +101,6 @@ void measure_stop(void)
 void measure_clear(void)
 {
 	cap_sum = 0;
+	measure_timestamp = chVTGetSystemTimeX();
 }
 

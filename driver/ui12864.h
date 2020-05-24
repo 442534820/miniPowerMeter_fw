@@ -17,16 +17,17 @@ typedef struct
 }UI12864_Bitmap_Type;
 
 
-extern void UI12864_Init(void);
-extern void UI12864_PutChar(uint8_t Page, uint8_t Column, char Char);
-extern void UI12864_PutCharReverse(uint8_t Page, uint8_t Column, char Char);
-extern void UI12864_PutString(uint8_t Page, uint8_t Column, const char *pStr);
-//extern void UI12864_DrawRect(uint8_t Page, uint8_t Column, uint8_t Height, uint8_t Width, const uint8_t *pData);
-//extern void UI12864_DrawBitmap(uint8_t Page, uint8_t Column, const UI12864_Bitmap_Type *pBitmapData);
-extern void UI12864_Fill(uint8_t Page, uint8_t Column, uint8_t Height, uint8_t Width, uint8_t FillData);
-extern void UI12864_Clear(void);
-extern const font_t* UI12864_FontSave(const font_t *font);
-extern void UI12864_FontRestore(const font_t *font);
+void UI12864_Init(void);
+void UI12864_PutChar(uint8_t Page, uint8_t Column, char Char);
+void UI12864_PutCharReverse(uint8_t Page, uint8_t Column, char Char);
+void UI12864_PutString(uint8_t Page, uint8_t Column, const char *pStr);
+void UI12864_PutStringReverse(uint8_t Page, uint8_t Column, const char *pStr);
+//void UI12864_DrawRect(uint8_t Page, uint8_t Column, uint8_t Height, uint8_t Width, const uint8_t *pData);
+//void UI12864_DrawBitmap(uint8_t Page, uint8_t Column, const UI12864_Bitmap_Type *pBitmapData);
+void UI12864_Fill(uint8_t Page, uint8_t Column, uint8_t Height, uint8_t Width, uint8_t FillData);
+void UI12864_Clear(void);
+const font_t* UI12864_FontSave(const font_t *font);
+void UI12864_FontRestore(const font_t *font);
 
 
 #if UI_CHACHE_ENABLE

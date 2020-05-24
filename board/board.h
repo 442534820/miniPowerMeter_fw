@@ -251,7 +251,7 @@
                                      PIN_PUPDR_PULLUP(GPIOA_UART2_RX) |     \
                                      PIN_PUPDR_PULLUP(GPIOA_BQ_PG) |        \
                                      PIN_PUPDR_PULLUP(GPIOA_BQ_STAT) |      \
-                                     PIN_PUPDR_PULLUP(GPIOA_BQ_CE) |        \
+                                     PIN_PUPDR_PULLDOWN(GPIOA_BQ_CE) |        \
                                      PIN_PUPDR_PULLUP(GPIOA_BQ_PSEL) |      \
                                      PIN_PUPDR_PULLUP(GPIOA_BQ_QON) |       \
                                      PIN_PUPDR_PULLUP(GPIOA_BQ_INT) |       \
@@ -267,7 +267,7 @@
                                      PIN_ODR_HIGH(GPIOA_UART2_RX) |         \
                                      PIN_ODR_HIGH(GPIOA_BQ_PG) |            \
                                      PIN_ODR_HIGH(GPIOA_BQ_STAT) |          \
-                                     PIN_ODR_HIGH(GPIOA_BQ_CE) |            \
+                                     PIN_ODR_LOW(GPIOA_BQ_CE) |            \
                                      PIN_ODR_HIGH(GPIOA_BQ_PSEL) |          \
                                      PIN_ODR_HIGH(GPIOA_BQ_QON) |           \
                                      PIN_ODR_HIGH(GPIOA_BQ_INT) |           \

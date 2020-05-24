@@ -19,6 +19,7 @@ extern volatile uint8_t log_data_switch;
 void measure_init(void);
 void measure_set_period(uint16_t period);
 uint16_t measure_get_period(void);
+uint32_t measure_get_time_seconds(void);
 void measure_start(void);
 void measure_stop(void);
 void measure_clear(void);

@@ -36,9 +36,9 @@ union {
 #define VIEW_CAPTION3_NUM  4
 const char* const ViewCaption3[VIEW_CAPTION3_NUM] = {
 	"Cap=",
-	"RaI=",
-	"RaU=",
-	"RaC="
+	"Tim=",
+	"RsU=",
+	"Avr="
 };
 
 
@@ -132,19 +132,20 @@ void ui_main(void)
 			UI12864_PutString(4, 40, str_buf);
 			switch (view_mode) {
 			case 0 : {
+				/* Display total capacity value */
 				float cap_val = cap_sum * 0.05 / 1000.0 / 3600.0; //Convert to mAh
 				if (cap_val >= 10000000)
 					chsnprintf(str_buf, sizeof(str_buf), "-over- mAh");
-				else if (cap_val >= 1000)
+				else if (cap_val >= 10000)
 					chsnprintf(str_buf, sizeof(str_buf), "%7.0fmAh", cap_val);
+				else if (cap_val >= 1000)
+					chsnprintf(str_buf, sizeof(str_buf), "%5.1fmAh", cap_val);
 				else if (cap_val >= 100)
-					chsnprintf(str_buf, sizeof(str_buf), "%6.1fmAh", cap_val);
+					chsnprintf(str_buf, sizeof(str_buf), "%5.2fmAh", cap_val);
 				else if (cap_val >= 10)
-					chsnprintf(str_buf, sizeof(str_buf), "%6.2fmAh", cap_val);
-				else if (cap_val >= 1)
-					chsnprintf(str_buf, sizeof(str_buf), "%6.3fmAh", cap_val);
+					chsnprintf(str_buf, sizeof(str_buf), "%5.3fmAh", cap_val);
 				else if (cap_val >= 0)
-					chsnprintf(str_buf, sizeof(str_buf), "%6.4fmAh", cap_val);
+					chsnprintf(str_buf, sizeof(str_buf), "%5.4fmAh", cap_val);
 				else if (cap_val > -1)
 					chsnprintf(str_buf, sizeof(str_buf), "%5.5fmAh", cap_val);
 				else if (cap_val > -10)
@@ -162,18 +163,33 @@ void ui_main(void)
 				UI12864_PutString(6, 40, str_buf);
 				break;
 				}
-			case 1:
-				chsnprintf(str_buf, sizeof(str_buf), "%04X", bus_cur);
+			case 1: {
+				/* Display total time value */
+				uint32_t tim_val = measure_get_time_seconds();
+				if (tim_val >= (100 * 24 * 3600))
+					chsnprintf(str_buf, sizeof(str_buf), "%5dd%2dh",
+						tim_val / 86400, tim_val % 86400 / 3600);
+				else if (tim_val >= (24 * 3600))
+					chsnprintf(str_buf, sizeof(str_buf), "%2dd%2dh%2dm",
+						tim_val / 86400, tim_val % 86400 / 3600, tim_val % 3600 / 60);
+				else
+					chsnprintf(str_buf, sizeof(str_buf), "%2dh%2dm%2ds",
+						tim_val / 3600, tim_val % 3600 / 60, tim_val % 60);
 				UI12864_PutString(6, 40, str_buf);
 				break;
+				}
 			case 2:
+				/* Display current shunt voltage */
 				chsnprintf(str_buf, sizeof(str_buf), "%4.2fuV", shunt_vot * 2.5f);
 				UI12864_PutString(6, 40, str_buf);
 				break;
-			case 3:
-				chsnprintf(str_buf, sizeof(str_buf), "%d", cap_sum);
+			case 3: {
+				/* Display average of current */
+				float avr_cur = cap_sum * 0.05 / 1000.0 / measure_get_time_seconds();
+				chsnprintf(str_buf, sizeof(str_buf), "%7.2fmA", avr_cur);
 				UI12864_PutString(6, 40, str_buf);
 				break;
+				}
 			}
 		}
 	}

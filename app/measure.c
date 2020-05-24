@@ -9,6 +9,7 @@ volatile int16_t shunt_vot;
 volatile int16_t bus_cur;
 volatile uint32_t ina_count;
 volatile int64_t cap_sum;
+volatile systime_t measure_timestamp;
 
 volatile uint16_t log_data[MEASURE_LOG_DATA_LEN];
 volatile uint16_t log_data_read_ptr;
@@ -81,8 +82,14 @@ uint16_t measure_get_period(void)
 	return trig_period;
 }
 
+uint32_t measure_get_time_seconds(void)
+{
+	return (chVTGetSystemTimeX() - measure_timestamp) / 1000;
+}
+
 void measure_start(void)
 {
+	measure_timestamp = chVTGetSystemTimeX();
 	gptStartContinuous(&GPTD3, trig_period);
 }
 
@@ -94,5 +101,6 @@ void measure_stop(void)
 void measure_clear(void)
 {
 	cap_sum = 0;
+	measure_timestamp = chVTGetSystemTimeX();
 }
 

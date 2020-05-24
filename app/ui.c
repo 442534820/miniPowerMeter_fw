@@ -146,17 +146,13 @@ void ui_main(void)
 					chsnprintf(str_buf, sizeof(str_buf), "%5.3fmAh", cap_val);
 				else if (cap_val >= 0)
 					chsnprintf(str_buf, sizeof(str_buf), "%5.4fmAh", cap_val);
-				else if (cap_val > -1)
-					chsnprintf(str_buf, sizeof(str_buf), "%5.5fmAh", cap_val);
 				else if (cap_val > -10)
-					chsnprintf(str_buf, sizeof(str_buf), "%5.4fmAh", cap_val);
+					chsnprintf(str_buf, sizeof(str_buf), "%4.3fmAh", cap_val);
 				else if (cap_val > -100)
-					chsnprintf(str_buf, sizeof(str_buf), "%5.3fmAh", cap_val);
+					chsnprintf(str_buf, sizeof(str_buf), "%4.2fmAh", cap_val);
 				else if (cap_val > -1000)
-					chsnprintf(str_buf, sizeof(str_buf), "%5.2fmAh", cap_val);
+					chsnprintf(str_buf, sizeof(str_buf), "%4.1fmAh", cap_val);
 				else if (cap_val > -10000)
-					chsnprintf(str_buf, sizeof(str_buf), "%5.1fmAh", cap_val);
-				else if (cap_val > -100000)
 					chsnprintf(str_buf, sizeof(str_buf), "%6.0fmAh", cap_val);
 				else
 					chsnprintf(str_buf, sizeof(str_buf), "-over- mAh");
